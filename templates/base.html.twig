@@ -2,11 +2,30 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <title>
+            {% block title %}Plateforme Sondage Atalan{% endblock %}
+        </title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet"  href="{{ asset('css/main.css') }}"> 
+        <!-- in the <head> section -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/datatables.min.css"/>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% include 'partials/header.html.twig' %}
+
         {% block body %}{% endblock %}
+
+        {% include 'partials/footer.html.twig' %}
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <!-- before the closing <body> tag -->
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/datatables.min.js"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
