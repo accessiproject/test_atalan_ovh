@@ -2,18 +2,17 @@
     <ul class="navbar-nav mr-auto">
         {% if app.user %}
             <li class="nav-item">
-                <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
+                <a href="{{ path('user_list') }}" class="nav-link">Utilisateurs</a>
             </li>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                    <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
+                </li>
+            </ul>
         {% endif %}
     </ul>
     </div>
 </nav>
-    {% if app.user %}
-        <div class="mb-3">
-            Bienvenue {{ app.user.firstname }} {{ app.user.lastname }}.
-        </div>
-    {% endif %}
-
 {% for label, messages in app.flashes %}
     <div class="container">
         <div class="alert alert-{{ label }}">
