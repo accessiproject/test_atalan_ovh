@@ -48,6 +48,11 @@ class User implements UserInterface
      */
     private $createdat;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +155,19 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
+    
+    public function getUpdatedat(): ?\DateTimeInterface
+    {
+        return $this->updatedat;
+    }
+
+    public function setUpdatedat(\DateTimeInterface $updatedat): self
+    {
+        $this->updatedat = $updatedat;
+
+        return $this;
+    }
+
     public function getCreatedat(): ?\DateTimeInterface
     {
         return $this->createdat;
@@ -160,5 +178,17 @@ class User implements UserInterface
         $this->createdat = $createdat;
 
         return $this;
+    }
+    
+    /**
+    * @ORM\PrePersist
+    * @ORM\PreUpdate
+    */
+    public function updatedTimestamps(): void {
+        $dateTimeNow = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->setUpdatedat($dateTimeNow);
+        if ($this->getCreatedat() === null) {
+            $this->setCreatedat($dateTimeNow);
+        }
     }
 }
