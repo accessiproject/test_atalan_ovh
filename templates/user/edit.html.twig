@@ -3,5 +3,21 @@
 {% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-{{ form(form) }}
+    <div>
+        {{ form_start(form) }}
+            <legend>
+                <h1>{{ id ? 'Modification de l\'utilisateur' : 'Création d\'un nouvel utilisateur' }}</h1>
+            </legend>
+            <fieldset>
+                {{ form_row(form.firstname) }}
+                {{ form_row(form.lastname) }}
+            </fieldset>
+            <fieldset>
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+            </fieldset>
+            <button type="submit">
+                {{ id ? 'Modifier l\'utilisateur' : 'Créer le nouvel utilisateur' }}</h1>
+            </button>
+        {{ form_end(form) }}
 {% endblock %}

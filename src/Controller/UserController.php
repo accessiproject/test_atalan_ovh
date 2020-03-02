@@ -52,6 +52,8 @@ class UserController extends AbstractController
 
             $user->setRoles(["ROLE_ADMIN"]);
 
+            $user->updatedTimestamps();
+
             // Enregistre le membre en base
             $manager->persist($user);
             $manager->flush();
