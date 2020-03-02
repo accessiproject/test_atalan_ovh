@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Consultation
+{% endblock %}
+
+{% block body %}
+    <h1>{{ survey.title }}</h1>
+    <div class='form-group'>
+        <p>Consigne donnée :</p>
+        <p>{{ survey.question }}</p>
+    </div>
+    <div class='form-group'>
+        <h2>Liste des composants techniques à tester :</h2>
+    </div>
+    <div class='form-group'>
+        <h2>Réponses :</h2>
+        <p>{{ survey.multiple ? '(plusieurs réponses possibles).' : '(une seule réponse possible).' }}</p>
+    </div>
+    <div class='form-group'>
+    </div>
+    <div class='form-group'>
+    </div>
+    <div class='form-group'>
+    </div>
+    <div class='form-group'>
+        <h2>Aides techniques utilisées :</h2>
+        <p>Quelle<span aria-hidden="true">(s)</span> aide<span aria-hidden="true">(s)</span> technique<span aria-hidden="true">(s)</span> avez-vous utilisé pendant ce test?</p>
+    </div>
+    <div class='form-group'>
+        <hr>
+        <input class="btn btn-success" type="submit" name="btSubmit" value="Enregistrer ma réponse" />
+    </div>
+    <div class='form-group'>
+        <hr>
+        <a role="button" class="btn btn-info" href="">Modifier</a>
+        <a role="button" class="btn btn-danger" href="">Supprimer</a>
+        <a role="button" class="btn btn-info" href="{{ path('survey_list') }}">Retour aux autres sondages</a>
+    </div>
+{% endblock %}

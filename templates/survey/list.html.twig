@@ -24,7 +24,7 @@
                 <td>{{ survey.createdat|date("m/d/Y H:i") }} – {{ survey.closedat|date("m/d/Y H:i") }}</td>
                 <td>{{ survey.title }}</td>
                 <td>{{ survey.status }}</td>
-                <td><a role="button" class="btn btn-info" href="">Voir</a></td>
+                <td><a role="button" class="btn btn-info" href="{{ path('survey_show', {'id': survey.id}) }}">Voir</a></td>
                 <td><a role="button" class="btn btn-info" href="">Modifier</a></td>
                 <td><a role="button" class="btn btn-danger" href="">Supprimer</a></td>
                 <td><a role="button" class="btn btn-info" href="">Voir les résultats</a></td>

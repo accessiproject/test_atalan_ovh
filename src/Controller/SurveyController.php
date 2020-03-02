@@ -24,4 +24,16 @@ class SurveyController extends AbstractController
             'surveys' => $surveys,
         ]);
     }
+        /**
+     * @Route("/consultation/{id}", name="survey_show")
+     */
+    public function survey_show($id)
+    {
+        $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
+        return $this->render('survey/show.html.twig', [
+            'controller_name' => 'SurveyController',
+            'survey' => $survey,
+        ]);
+    }
+
 }
