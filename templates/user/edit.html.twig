@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un compte{% endblock %}
+{% block title %}{{ id ? 'Modification de l\'utilisateur' : 'Création d\'un nouvel utilisateur' }}{% endblock %}
 
 {% block body %}
     <div>
