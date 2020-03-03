@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Liste des sondages</h1>
     <p>
-        <a href="">Ajouter un nouveau sondage</a>
+        <a href="{{ path('survey_edit', {'id': 0}) }}">Ajouter un nouveau sondage</a>
     </p>
     <table class="table table-striped table-bordered table-hover">
         <tr>
@@ -21,7 +21,7 @@
         </tr>
         {% for survey in surveys %}
             <tr>
-                <td>{{ survey.createdat|date("m/d/Y H:i") }} – {{ survey.closedat|date("m/d/Y H:i") }}</td>
+                <td>{{ survey.createdat|date("d/m/Y H:i") }} – {{ survey.closedat|date("d/m/Y H:i") }}</td>
                 <td>{{ survey.title }}</td>
                 <td>{{ survey.status }}</td>
                 <td><a role="button" class="btn btn-info" href="{{ path('survey_show', {'id': survey.id}) }}">Voir</a></td>

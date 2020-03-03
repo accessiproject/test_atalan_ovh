@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un sondage{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        <h1>Ajouter un nouveau sondage</h1>
+        <fieldset>
+            <legend>
+                <h2>Informations générales sur le sondage :</h2>
+            </legend>
+            <div class="form-group">
+                {{ form_row(form.title) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.title) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.status) }}
+                {{ form_widget(form.status) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.closing_message) }}
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <h2>Question :</h2>
+            </legend>
+            <div class="form-group">
+                {{ form_row(form.question) }}
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <h3>Liste des composants techniques :</h3>
+            </legend>
+            <div class="form-group"></div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <h2>Réponses :</h2>
+            </legend>
+            <div class="form-group">
+                {{ form_row(form.multiple) }}
+            </div>
+        </fieldset>
+        <button type="submit">Ajouter le sondage</button>
+    {{ form_end(form) }}
+    {% endblock %}
