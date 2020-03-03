@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class SurveyType extends AbstractType
 {
@@ -43,7 +44,13 @@ class SurveyType extends AbstractType
                     'placeholder' => 'Le sondage est clôt.'
                 ),
                 'required' => false,
-            ]);
+            ])
+            ->add('propositions', CollectionType::class, array(  
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
