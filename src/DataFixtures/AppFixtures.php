@@ -2,13 +2,14 @@
 
 namespace App\DataFixtures;
 
+use Faker;
 use App\Entity\User;
 use App\Entity\Survey;
 use App\Entity\Proposition;
+use App\Entity\TechnicalComponent;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Faker;
 
 class AppFixtures extends Fixture
 {
@@ -52,11 +53,22 @@ class AppFixtures extends Fixture
             $survey->updatedTimestamps();
             $survey->setClosedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+30 days', $timezone = null));
             
+            //creation propositions
             for ($j = 1; $j <= 3; $j++) {
                 $proposition = new Proposition();
                 $proposition->setSurvey($survey);
-                $proposition->setWording($faker->word);
+                $proposition->setWording($faker->sentence($nbWords = 6, $variableNbWords = true));
                 $manager->persist($proposition);
+            }
+            
+            //creation TechnicalComponents
+            for ($j = 1; $j <= 3; $j++) {
+                $technicalcomponent = new TechnicalComponent();
+                $technicalcomponent->setSurvey($survey);
+                $technicalcomponent->setTitle($faker->sentence($nbWords = 6, $variableNbWords = true));
+                $technicalcomponent->setChoice(false);
+                $technicalcomponent->setUrl($faker->url);
+                $manager->persist($technicalcomponent);
             }
             $manager->persist($survey);
         }
