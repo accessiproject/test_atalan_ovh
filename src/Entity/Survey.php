@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,6 +57,16 @@ class Survey
      * @ORM\Column(type="datetime")
      */
     private $closedat;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Proposition", mappedBy="question", orphanRemoval=true)
+     */
+    private $propositions;
+
+    public function __construct()
+    {
+        $this->propositions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -167,5 +179,36 @@ class Survey
         if ($this->getCreatedat() === null) {
             $this->setCreatedat($dateTimeNow);
         }
+    }
+
+    /**
+     * @return Collection|Proposition[]
+     */
+    public function getPropositions(): Collection
+    {
+        return $this->propositions;
+    }
+
+    public function addProposition(Proposition $proposition): self
+    {
+        if (!$this->propositions->contains($proposition)) {
+            $this->propositions[] = $proposition;
+            $proposition->setSurvey($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProposition(Proposition $proposition): self
+    {
+        if ($this->propositions->contains($proposition)) {
+            $this->propositions->removeElement($proposition);
+            // set the owning side to null (unless already changed)
+            if ($proposition->getSurvey() === $this) {
+                $proposition->setSurvey(null);
+            }
+        }
+
+        return $this;
     }
 }
