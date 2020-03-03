@@ -63,9 +63,15 @@ class Survey
      */
     private $propositions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TechnicalComponent", mappedBy="survey", orphanRemoval=true)
+     */
+    private $technicalComponents;
+
     public function __construct()
     {
         $this->propositions = new ArrayCollection();
+        $this->technicalComponents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +212,37 @@ class Survey
             // set the owning side to null (unless already changed)
             if ($proposition->getSurvey() === $this) {
                 $proposition->setSurvey(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TechnicalComponent[]
+     */
+    public function getTechnicalComponents(): Collection
+    {
+        return $this->technicalComponents;
+    }
+
+    public function addTechnicalComponent(TechnicalComponent $technicalComponent): self
+    {
+        if (!$this->technicalComponents->contains($technicalComponent)) {
+            $this->technicalComponents[] = $technicalComponent;
+            $technicalComponent->setSurvey($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnicalComponent(TechnicalComponent $technicalComponent): self
+    {
+        if ($this->technicalComponents->contains($technicalComponent)) {
+            $this->technicalComponents->removeElement($technicalComponent);
+            // set the owning side to null (unless already changed)
+            if ($technicalComponent->getSurvey() === $this) {
+                $technicalComponent->setSurvey(null);
             }
         }
 
