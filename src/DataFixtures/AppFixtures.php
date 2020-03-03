@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\Survey;
+use App\Entity\Proposition;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -50,6 +51,13 @@ class AppFixtures extends Fixture
             $survey->setClosingMessage($faker->text);
             $survey->updatedTimestamps();
             $survey->setClosedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+30 days', $timezone = null));
+            
+            for ($j = 1; $j <= 3; $j++) {
+                $proposition = new Proposition();
+                $proposition->setSurvey($survey);
+                $proposition->setWording($faker->word);
+                $manager->persist($proposition);
+            }
             $manager->persist($survey);
         }
 
