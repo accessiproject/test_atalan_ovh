@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Survey;
+use App\Form\PropositionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,13 +45,12 @@ class SurveyType extends AbstractType
                     'placeholder' => 'Le sondage est clôt.'
                 ),
                 'required' => false,
-            ])
-            ->add('propositions', CollectionType::class, array(  
+             ]);
+            $builder->add('propositions', CollectionType::class, [
+                'entry_type' => PropositionType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'by_reference' => false
-            ));
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

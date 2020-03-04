@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Survey;
+use App\Entity\Proposition;
 use App\Form\SurveyType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
