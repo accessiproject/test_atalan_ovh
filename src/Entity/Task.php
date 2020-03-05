@@ -71,8 +71,6 @@ class Task
 
     public function removeTag(tag $tag): self
     {
-        //$this->tags->removeElement($tag);
-        
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
             //set the owning side to null (unless already changed)
