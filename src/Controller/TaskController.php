@@ -43,4 +43,36 @@ class TaskController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/test", name="task_test")
+     */
+    public function test(Request $request, EntityManagerInterface $manager)
+    {
+        $task = new Task();
+
+        // dummy code - this is here just so that the Task has some tags
+        // otherwise, this isn't an interesting example
+        $tag = new Tag();
+        $tag->setName('');
+        $task->getTags()->add($tag);
+
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {    
+            $tag->setTask($task);
+            $manager->persist($task);
+            $manager->flush();
+            
+            $manager->persist($task);
+            $manager->flush();
+            return $this->redirectToRoute('survey_list');
+        }
+
+        return $this->render('task/test.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }
