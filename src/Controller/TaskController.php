@@ -54,7 +54,7 @@ class TaskController extends AbstractController
         // dummy code - this is here just so that the Task has some tags
         // otherwise, this isn't an interesting example
         $tag = new Tag();
-        $tag->setName('');
+        //$tag->setName('');
         $task->getTags()->add($tag);
 
         $form = $this->createForm(TaskType::class, $task);
