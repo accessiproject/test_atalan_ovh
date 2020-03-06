@@ -3,6 +3,7 @@
 {% block title %}Hello TaskController!{% endblock %}
 
 {% block body %}
+<button onclick="add()">Ajouter une proposition</button>
 {# templates/task/new.html.twig #}
 
 {# ... #}
@@ -15,10 +16,11 @@
     <ol id="idOlProposition" class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}">
         {# iterate over each existing tag and render its only field: name #}
         {% for tag in form.tags %}
-            <li>{{ form_row(tag.name) }}</li>
+            <li id="idLi">
+                {{ form_row(tag.name) }}
+            </li>
         {% endfor %}
     </ol>
-    <button>Ajouter une proposition</button>
     <button type="submit">Valider</button>
 {{ form_end(form) }}
 
@@ -56,9 +58,11 @@ jQuery(document).ready(function() {
 function addTagForm($collectionHolder, $newLinkLi) {
     // Get the data-prototype explained earlier
     var prototype = $collectionHolder.data('prototype');
-
+    //console.log(prototype);
+    
     // get the new index
     var index = $collectionHolder.data('index');
+    //console.log(index);
 
     var newForm = prototype;
     // You need this only if you didn't set 'label' => false in your tags field in TaskType
@@ -69,6 +73,7 @@ function addTagForm($collectionHolder, $newLinkLi) {
     // Replace '__name__' in the prototype's HTML to
     // instead be a number based on how many items we have
     newForm = newForm.replace(/__name__/g, index);
+    //console.log(newForm);
 
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
@@ -91,9 +96,17 @@ function addTagFormDeleteLink($tagFormLi) {
     });
 }
 
-document.getElementById("idOlProposition").innerHTML="Hello World !";
-document.body.appendChild();
+function add() {
+    /*
+    let x = document.createElement("li");   
+    let t = document.createTextNode("Café");   
+    x.appendChild(t);
+    .appendChild(x);
+    */
+    let olProposition = document.getElementById("idOlProposition");
+    console.log(olProposition.getAttribute("data-prototype"));
 
+}
 </script>
 <script src="_js/form.js"></script>
 
