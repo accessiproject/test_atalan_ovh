@@ -27,6 +27,12 @@
 {# ... #}
 <script>
 
+let tablabel = idOlProposition.getElementsByTagName("label");
+for (i=0;i<tablabel.length;i++) {
+    var label = [];
+    label.push(tablabel[i].textContent);
+}
+
 var cpt=1;
 function add() {
     let olProposition = document.getElementById("idOlProposition");
@@ -34,27 +40,23 @@ function add() {
     data = data.replace(/__name__/g, cpt++);
     let x = document.createElement("li");
     x.innerHTML=data;
-    let tabli=x.getElementsByTagName("label");
     let btSup = document.createElement("button");
-    btSup.innerHTML="Supprimer " + cpt;
+    btSup.innerHTML="Supprimer cet élément";
     btSup.addEventListener("click", function(){
         olProposition.removeChild(x);
         olProposition.style.listStyleType="none";
         let tab=olProposition.getElementsByTagName("li");
         for (let i=0;i<tab.length;i++) {
-            //let tabli=tab[i].getElementsByTagName("label");
+            let tabli = tab[i].getElementsByTagName("label");
             for (let j=0;j<tabli.length;j++) {
-                //let txt_label = tabli[j].textContent;
-                var label = tabli[j].textContent;
                 var cpt=i+1;
-                tabli[j].innerHTML=cpt + ". " + label + " n°" + cpt + " :";    
+                tabli[j].innerHTML=cpt + ". " + label[j] + " n°" + cpt + " :"; 
             }
-        }
+        }        
     });
     x.appendChild(btSup);
     olProposition.appendChild(x);
 }
-
 
 </script>
 <script src="_js/form.js"></script>
