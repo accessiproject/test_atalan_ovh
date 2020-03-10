@@ -21,42 +21,68 @@
             </li>
         {% endfor %}
     </ol>
+    <div id="add_button"></div>
     <button type="submit">Valider</button>
 {{ form_end(form) }}
 
 {# ... #}
 <script>
 
+//initialisation de la variable olProposition
+let olProposition=document.getElementById("idOlProposition");
+
+//suppression des styles de la liste ordonnée (suppression des numéros)
+olProposition.style.listStyleType="none";
+
+//initialisation et stockage des labels dans un tableau
 let tablabel = idOlProposition.getElementsByTagName("label");
 for (i=0;i<tablabel.length;i++) {
     var label = [];
     label.push(tablabel[i].textContent);
 }
 
+function edit_label() {
+    let tab=olProposition.getElementsByTagName("li");
+    for (let i=0;i<tab.length;i++) {
+        let tabli = tab[i].getElementsByTagName("label");
+        for (let j=0;j<tabli.length;j++) {
+            var compteur = i + 1;
+            tabli[j].innerHTML=compteur + ". " + label[j] + " n°" + compteur + " :"; 
+        }
+    }        
+}
+
+function delete_button(param,action) {
+    let btSup = document.createElement("button");
+    btSup.innerHTML="Supprimer cet élément";
+    btSup.addEventListener("click", function(){
+        if (action=="delete") {
+            olProposition.removeChild(param);
+            edit_label();
+        } else {
+            add();
+        }
+    });
+    param.appendChild(btSup);
+}
+
+edit_label();
+
+let tab=olProposition.getElementsByTagName("li");
+delete_button(tab[0],"delete");
+
 var cpt=1;
 function add() {
-    let olProposition = document.getElementById("idOlProposition");
     var data = olProposition.getAttribute("data-prototype");
     data = data.replace(/__name__/g, cpt++);
     let x = document.createElement("li");
     x.innerHTML=data;
-    let btSup = document.createElement("button");
-    btSup.innerHTML="Supprimer cet élément";
-    btSup.addEventListener("click", function(){
-        olProposition.removeChild(x);
-        olProposition.style.listStyleType="none";
-        let tab=olProposition.getElementsByTagName("li");
-        for (let i=0;i<tab.length;i++) {
-            let tabli = tab[i].getElementsByTagName("label");
-            for (let j=0;j<tabli.length;j++) {
-                var cpt=i+1;
-                tabli[j].innerHTML=cpt + ". " + label[j] + " n°" + cpt + " :"; 
-            }
-        }        
-    });
-    x.appendChild(btSup);
+    delete_button(x,"delete");
     olProposition.appendChild(x);
+    edit_label();
 }
+
+delete_button(add_button,"add");
 
 </script>
 <script src="_js/form.js"></script>

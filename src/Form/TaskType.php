@@ -6,6 +6,7 @@ use App\Entity\Task;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class TaskType extends AbstractType
@@ -13,7 +14,9 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description');
+            ->add('description', TextType::class, [
+                'required' => false,
+            ]);
             $builder->add('tags', CollectionType::class, [
                 'entry_type' => TagType::class,
                 'entry_options' => ['label' => false],
