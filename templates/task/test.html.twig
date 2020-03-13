@@ -3,7 +3,6 @@
 {% block title %}Hello TaskController!{% endblock %}
 
 {% block body %}
-<button onclick="add()">Ajouter une proposition</button>
 {# templates/task/new.html.twig #}
 
 {# ... #}
@@ -16,7 +15,7 @@
     <ol id="idOlProposition" class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}">
         {# iterate over each existing tag and render its only field: name #}
         {% for tag in form.tags %}
-            <li id="idLi">
+            <li>
                 {{ form_row(tag.name) }}
             </li>
         {% endfor %}
@@ -26,8 +25,16 @@
 {{ form_end(form) }}
 
 {# ... #}
+<script src="_js/formCollectionTypeClass.js"></script>
 <script>
 
+function newProposition() {
+	let proposition = new FormCollectionTypeClass("idOlProposition","add_button");
+}
+
+newProposition();
+
+/*
 //initialisation de la variable olProposition
 let olProposition=document.getElementById("idOlProposition");
 
@@ -84,8 +91,9 @@ function add() {
 }
 
 create_button(add_button,"add");
+*/
+
 
 </script>
-<script src="_js/form.js"></script>
 
 {% endblock %}
