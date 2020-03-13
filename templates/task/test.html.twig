@@ -52,7 +52,7 @@ function edit_label() {
     }        
 }
 
-function delete_button(param,action) {
+function create_button(param,action) {
     let btSup = document.createElement("button");
     btSup.innerHTML="Supprimer cet élément";
     btSup.addEventListener("click", function(){
@@ -60,6 +60,7 @@ function delete_button(param,action) {
             olProposition.removeChild(param);
             edit_label();
         } else {
+            btSup.type="button";
             add();
         }
     });
@@ -69,7 +70,7 @@ function delete_button(param,action) {
 edit_label();
 
 let tab=olProposition.getElementsByTagName("li");
-delete_button(tab[0],"delete");
+create_button(tab[0],"delete");
 
 var cpt=1;
 function add() {
@@ -77,12 +78,12 @@ function add() {
     data = data.replace(/__name__/g, cpt++);
     let x = document.createElement("li");
     x.innerHTML=data;
-    delete_button(x,"delete");
+    create_button(x,"delete");
     olProposition.appendChild(x);
     edit_label();
 }
 
-delete_button(add_button,"add");
+create_button(add_button,"add");
 
 </script>
 <script src="_js/form.js"></script>
