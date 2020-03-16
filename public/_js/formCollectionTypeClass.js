@@ -1,7 +1,9 @@
 class FormCollectionTypeClass {
-	constructor(idol,idbuttonadd) {
+	constructor(idol,idbuttonadd,libelle_delete,libelle_add,cpt) {
 		this.idol=idol;
 		this.idbuttonadd=idbuttonadd;
+		this.libelle_delete=libelle_delete;
+		this.libelle_add=libelle_add;
 		this.ol=document.getElementById(idol);
 		this.ol.style.listStyleType="none";
 		this.labels=this.ol.getElementsByTagName("label");
@@ -10,9 +12,8 @@ class FormCollectionTypeClass {
 			this.tablabel.push(this.labels[i].textContent);
 		}
 		this.edit_label();
-		this.tab=this.ol.getElementsByTagName("li");
-		console.log(this.tab[0]);
-		this.create_button(this.tab[0],"delete");
+		this.tab1=this.ol.getElementsByTagName("li");
+		this.create_button(this.tab1[0],"delete");
 		this.idbuttonadd=document.getElementById(idbuttonadd);
 		this.create_button(this.idbuttonadd,"add");
 	}
@@ -30,16 +31,26 @@ class FormCollectionTypeClass {
 
 	create_button(param,action) {
 		this.btn=document.createElement("button");
-		this.btn.innerHTML="Supprimer cet élément";
-		this.btn.addEventListener("click", function(){
-			if (action=="delete") {
-				this.ol.removeChild(this.param);
-				this.edit_label();
-			} else {
-				this.btn.type="button";
-				alert("Bonjour");
-			}
-		});
+		//this.btn.innerHTML="Supprimer cet élément";
+		this.btn.type="button";
+		if (action=="delete") {
+			this.btn.innerHTML=this.libelle_delete;
+			this.btn.addEventListener("click",()=>this.ol.removeChild(param));
+			this.btn.addEventListener("click",()=>this.edit_label());
+		} else {
+			this.btn.innerHTML=this.libelle_add;
+			this.btn.addEventListener("click",()=>this.add());
+		}
 		param.appendChild(this.btn);
+	}
+	
+	add() {
+		this.data=this.ol.getAttribute("data-prototype");
+		this.data=this.data.replace(/__name__/g, cpt++);
+		this.x=document.createElement("li");
+		this.x.innerHTML=this.data;
+		this.create_button(this.x,"delete");
+		this.ol.appendChild(this.x);
+		this.edit_label();
 	}
 }

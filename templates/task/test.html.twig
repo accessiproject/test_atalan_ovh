@@ -28,8 +28,9 @@
 <script src="_js/formCollectionTypeClass.js"></script>
 <script>
 
+var cpt=1;
 function newProposition() {
-	let proposition = new FormCollectionTypeClass("idOlProposition","add_button");
+	let proposition = new FormCollectionTypeClass("idOlProposition","add_button","Supprimer cet élément","Ajouter une nouvelle proposition",cpt);
 }
 
 newProposition();
