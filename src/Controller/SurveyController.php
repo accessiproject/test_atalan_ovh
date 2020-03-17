@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Survey;
-use App\Entity\Proposition;
 use App\Form\SurveyType;
+use App\Entity\Proposition;
+use App\Entity\TechnicalComponent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,6 +36,10 @@ class SurveyController extends AbstractController
     public function survey_edit($id, Request $request, EntityManagerInterface $manager)
     {
         $survey = new Survey();
+        $proposition = new Proposition();
+        $technicalComponent = new TechnicalComponent();
+        $survey->getPropositions()->add($proposition);
+        $survey->getTechnicalComponents()->add($technicalComponent);
         $form = $this->createForm(SurveyType::class, $survey);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Survey;
 use App\Form\PropositionType;
+use App\Form\TechnicalComponentType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,7 +19,7 @@ class SurveyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class,[
+            ->add('title', TextType::class, [
                 'label' => 'Titre du sondage :',
             ])
             ->add('question', TextareaType::class, [
@@ -37,7 +38,6 @@ class SurveyType extends AbstractType
                     'Ouvert' => 'Ouvert',
                     'Fermé' => 'Fermé',
                 ],
-                
             ])
             ->add('closing_message', TextareaType::class, [
                 'label' => 'Message de clôture du sondage :',
@@ -50,6 +50,15 @@ class SurveyType extends AbstractType
                 'entry_type' => PropositionType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ]);
+            $builder->add('technicalComponents', CollectionType::class, [
+                'entry_type' => TechnicalComponentType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ]);
     }
 

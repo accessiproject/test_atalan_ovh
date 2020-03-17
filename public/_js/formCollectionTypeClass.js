@@ -7,8 +7,8 @@ class FormCollectionTypeClass {
 		this.ol=document.getElementById(idol);
 		this.ol.style.listStyleType="none";
 		this.labels=this.ol.getElementsByTagName("label");
+		this.tablabel=[];
 		for (let i=0;i<this.labels.length;i++) {
-			this.tablabel=[];
 			this.tablabel.push(this.labels[i].textContent);
 		}
 		this.edit_label();

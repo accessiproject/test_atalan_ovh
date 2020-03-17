@@ -16,57 +16,57 @@ class Survey
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=300)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=500)
      */
-    private $question;
+    protected $question;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $multiple;
+    protected $multiple;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $closing_message;
+    protected $closing_message;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdat;
+    protected $createdat;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $updatedat;
+    protected $updatedat;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $closedat;
+    protected $closedat;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Proposition", mappedBy="question", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Proposition", mappedBy="survey", cascade={"persist"}, orphanRemoval=true)
      */
-    private $propositions;
+    protected $propositions;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TechnicalComponent", mappedBy="survey", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\TechnicalComponent", mappedBy="survey", cascade={"persist"}, orphanRemoval=true)
      */
-    private $technicalComponents;
+    protected $technicalComponents;
 
     public function __construct()
     {
@@ -200,6 +200,7 @@ class Survey
         if (!$this->propositions->contains($proposition)) {
             $this->propositions[] = $proposition;
             $proposition->setSurvey($this);
+            $this->propositions->add($proposition);
         }
 
         return $this;
@@ -231,6 +232,7 @@ class Survey
         if (!$this->technicalComponents->contains($technicalComponent)) {
             $this->technicalComponents[] = $technicalComponent;
             $technicalComponent->setSurvey($this);
+            $this->technicalComponents->add($technicalComponent);
         }
 
         return $this;

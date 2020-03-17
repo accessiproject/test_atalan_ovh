@@ -25,9 +25,8 @@
 {{ form_end(form) }}
 
 {# ... #}
-<script src="_js/formCollectionTypeClass.js"></script>
 <script>
-
+/*
 var cpt=1;
 function newProposition() {
 	let proposition = new FormCollectionTypeClass("idOlProposition","add_button","Supprimer cet élément","Ajouter une nouvelle proposition",cpt);
@@ -35,8 +34,9 @@ function newProposition() {
 
 newProposition();
 
-/*
+
 //initialisation de la variable olProposition
+
 let olProposition=document.getElementById("idOlProposition");
 
 //suppression des styles de la liste ordonnée (suppression des numéros)

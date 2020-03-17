@@ -5,9 +5,6 @@
 {% block body %}
     {{ form_start(form) }}
         <h1>Ajouter un nouveau sondage</h1>
-        <ul class="tags" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">
-            {{ form_widget(form.propositions.vars.prototype.wording)|e }}
-        </ul>
         <fieldset>
             <legend>
                 <h2>Informations générales sur le sondage :</h2>
@@ -38,7 +35,18 @@
             <legend>
                 <h3>Liste des composants techniques :</h3>
             </legend>
-            <div class="form-group"></div>
+            <ol id="idOlComponent" class="technicalComponents" data-prototype="{{ form_widget(form.technicalComponents.vars.prototype)|e('html_attr') }}">
+                {# iterate over each existing proposition and render its only field: wording #}
+                {% for technicalComponent in form.technicalComponents %}
+                    <li>
+                        {{ form_row(technicalComponent.title) }}
+                        {{ form_row(technicalComponent.choice) }}
+                        {{ form_row(technicalComponent.code) }}
+                        {{ form_row(technicalComponent.url) }}
+                    </li>
+                {% endfor %}
+            </ol>
+            <div id="add_buttoncomponent"></div>
         </fieldset>
         <fieldset>
             <legend>
@@ -47,7 +55,34 @@
             <div class="form-group">
                 {{ form_row(form.multiple) }}
             </div>
+            <ol id="idOlProposition" class="propositions" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">
+                {# iterate over each existing proposition and render its only field: wording #}
+                {% for proposition in form.propositions %}
+                    <li>
+                        {{ form_row(proposition.wording) }}
+                    </li>
+                {% endfor %}
+            </ol>
+            <div id="add_button"></div>
         </fieldset>
         <button type="submit">Ajouter le sondage</button>
     {{ form_end(form) }}
-    {% endblock %}
+<script src="{{ asset('_js/formCollectionTypeClass.js') }}"></script>
+<script>
+
+var cpt=1;
+function proposition() {
+	let proposition = new FormCollectionTypeClass("idOlProposition","add_button","Supprimer cet élément","Ajouter une nouvelle proposition",cpt);
+}
+
+proposition();
+
+var cp=1;
+function component() {
+	let component = new FormCollectionTypeClass("idOlComponent","add_buttoncomponent","Supprimer cet élément","Ajouter un nouveau composant",cp);
+}
+component();
+
+</script>
+
+{% endblock %}
