@@ -32,6 +32,7 @@ class SurveyType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut du sondage :',
                 'expanded' => true,
+                'data' => 'Initialisé',
                 'choices' => [
                     'Annulé' => 'Annulé',
                     'Initialisé' => 'Initialisé',
