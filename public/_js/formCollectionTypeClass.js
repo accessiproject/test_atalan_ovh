@@ -24,14 +24,16 @@ class FormCollectionTypeClass {
 			this.newtablabel=this.tabli[i].getElementsByTagName("label");
 			for (let j=0;j<this.newtablabel.length;j++) {
 				this.number=i+1;
-				this.newtablabel[j].innerHTML=this.number + ". " + this.tablabel[j] + " n°" + this.number + " :"; 
+				if (this.newtablabel.length>1)
+					this.newtablabel[j].innerHTML=this.tablabel[j] + " n°" + this.number + " :";
+				else
+					this.newtablabel[j].innerHTML=this.number + ". " + this.tablabel[j] + " n°" + this.number + " :";
 			}
 		}        
 	}
-
+	
 	create_button(param,action) {
 		this.btn=document.createElement("button");
-		//this.btn.innerHTML="Supprimer cet élément";
 		this.btn.type="button";
 		if (action=="delete") {
 			this.btn.innerHTML=this.libelle_delete;

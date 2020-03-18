@@ -6,13 +6,17 @@ use App\Entity\Proposition;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PropositionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('wording');
+            ->add('wording', TextType::class, [
+                'label' => 'Proposition',
+                'required' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
