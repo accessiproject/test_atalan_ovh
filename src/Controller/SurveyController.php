@@ -72,4 +72,16 @@ class SurveyController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/delete/{id}", name="survey_delete")
+     */
+    public function survey_delete($id, EntityManagerInterface $manager)
+    {
+        $survey = $manager->getRepository(Survey::class)->find($id);
+        $manager->remove($survey);
+        $manager->flush();    
+        return $this->redirectToRoute('survey_list', [
+            'id' => $survey->getId(),
+        ]);
+    }
 }
