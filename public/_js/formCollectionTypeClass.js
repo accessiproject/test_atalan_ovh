@@ -29,9 +29,11 @@ class FormCollectionTypeClass {
 				this.number=i+1;
 				if (this.newtablabel.length>1) {
 					if (j==0) {
-						this.newtablabel[j].innerHTML=this.tagtitlestart + this.title + " n°" + this.number + " :" + this.tagtitleend + this.tablabel[j] + " n°" + this.number;
+						this.newtablabel[j].innerHTML=this.tagtitlestart + this.number + ". " + this.title + " n°" + this.number + " :" + this.tagtitleend + this.tablabel[j];
+					} else if (j==this.tablabel.length-1) {
+						this.newtablabel[j].innerHTML=this.tablabel[j];
 					} else {
-						this.newtablabel[j].innerHTML=this.tablabel[j] + " n°" + this.number;
+						this.newtablabel[j].innerHTML=this.tablabel[j];
 					}
 				} else
 					this.newtablabel[j].innerHTML=this.number + ". " + this.tablabel[j] + " n°" + this.number + " :";

@@ -78,31 +78,32 @@ proposition();
 
 var cp=1;
 function component() {
-	let component = new FormCollectionTypeClass("idOlComponent","add_buttoncomponent","Supprimer cet élément","Ajouter un nouveau composant",cp,"<h4>","Composant","</h4>");
+	let component = new FormCollectionTypeClass("idOlComponent","add_buttoncomponent","Supprimer cet élément","Ajouter un nouveau composant",cp,"<h4>","Composant technique","</h4>");
 }
 component();
 
-/*
+
+tabdiv=idOlComponent.querySelectorAll("div");
+showcode();
+
 function test() {
-    let olComponent=document.getElementById("idOlComponent");
-    
-    let tabli = olComponent.getElementsByTagName("li");
-    for (let i=0;i<tabli.length;i++) {
-        let tabradio = tabli[i].querySelector("technicalComponents#");
-        console.log(tabradio);
-    }
-    let code = document.getElementById("technicalComponents_0_choice_0");
-    let url = document.getElementById("technicalComponents_0_choice_1");
-    code.addEventListener("click",()=>affichercode(),false);
-    url.addEventListener("click",()=>afficherurl(),false);
-    var tab = idOlComponent.querySelectorAll("input[type=radio]" > div);
-    console.log(tab);
-    
-    var test = olComponent.querySelectorAll(div > li);
-    console.log(test);
+    //let tabli=idOlComponent.getElementsByTagName("li");
+    let tabradio = tabdiv[2].querySelectorAll("input[type=radio]");
+    tabradio[0].addEventListener("click",()=>showcode(),false);
+    tabradio[1].addEventListener("click",()=>showurl(),false);
 }
 test();
-*/
+
+function showcode() {
+    tabdiv[3].style.display="inline";
+    tabdiv[4].style.display="none";
+}
+
+function showurl() {
+    tabdiv[4].style.display="inline";
+    tabdiv[3].style.display="none";
+}
+
 </script>
 
 {% endblock %}
