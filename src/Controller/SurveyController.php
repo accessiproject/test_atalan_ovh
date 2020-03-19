@@ -43,6 +43,8 @@ class SurveyController extends AbstractController
         $form = $this->createForm(SurveyType::class, $survey);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $proposition->setSurvey($survey);
+            $technicalComponent->setSurvey($survey);
             $survey->updatedTimestamps();
             $survey->setClosedat(new \DateTime('now'));
 

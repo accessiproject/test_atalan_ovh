@@ -31,9 +31,11 @@ class TechnicalComponentType extends AbstractType
             ])
             ->add('code', TextareaType::class, [
                 'label' => 'Code source',
+                'required' => false,
             ])
             ->add('url', UrlType::class, [
                 'label' => 'Adresse URL',
+                'required' => false,
             ]);
     }
 
