@@ -12,6 +12,14 @@
     </div>
     <div class='form-group'>
         <h2>Liste des composants techniques à tester :</h2>
+        {% for technicalComponent in survey.technicalComponents %}
+            <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+            {% if technicalComponent.choice > 0 %}
+                {{ technicalComponent.code }}
+            {% else %}
+               <a href="{{ technicalComponent.url }}">{{ technicalComponent.url }}</a>
+            {% endif %}
+        {% endfor %}
     </div>
     <div class='form-group'>
         <h2>Réponses :</h2>

@@ -35,11 +35,17 @@ class SurveyController extends AbstractController
      */
     public function survey_edit($id, Request $request, EntityManagerInterface $manager)
     {
-        $survey = new Survey();
+        
+        if ($id > 0)
+            $survey = $manager->getRepository(Survey::class)->find($id);
+        else
+            $survey = new Survey();
+        
         $proposition = new Proposition();
         $technicalComponent = new TechnicalComponent();
         $survey->getPropositions()->add($proposition);
         $survey->getTechnicalComponents()->add($technicalComponent);
+        
         $form = $this->createForm(SurveyType::class, $survey);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
