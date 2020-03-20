@@ -525,6 +525,9 @@
     "webmozart/assert": {
         "version": "1.7.0"
     },
+    "whichbrowser/parser": {
+        "version": "v2.0.42"
+    },
     "zendframework/zend-code": {
         "version": "3.4.1"
     },

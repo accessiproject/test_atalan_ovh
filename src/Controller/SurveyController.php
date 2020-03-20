@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use WhichBrowser;
+
 
 /**
 * @IsGranted("ROLE_ADMIN")
@@ -27,6 +29,7 @@ class SurveyController extends AbstractController
         return $this->render('survey/list.html.twig', [
             'controller_name' => 'SurveyController',
             'surveys' => $surveys,
+            'os' => $os,
         ]);
     }
 
