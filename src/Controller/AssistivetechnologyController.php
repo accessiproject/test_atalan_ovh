@@ -57,4 +57,16 @@ class AssistivetechnologyController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/suppression/{id}", name="assistivetechnology_delete")
+     */
+    public function assistivetechnology_delete($id, EntityManagerInterface $manager)
+    {
+        $category = $manager->getRepository(Category::class)->find($id);
+        $manager->remove($category);
+        $manager->flush();    
+        return $this->redirectToRoute('assistivetechnology_list', [
+            'id' => $category->getId(),
+        ]);
+    }
 }
