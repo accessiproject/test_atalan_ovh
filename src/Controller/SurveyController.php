@@ -31,7 +31,7 @@ class SurveyController extends AbstractController
     }
 
     /**
-     * @Route("/edition/{id}", name="survey_edit")
+     * @Route("/editionsondage/{id}", name="survey_edit")
      */
     public function survey_edit($id, Request $request, EntityManagerInterface $manager)
     {

@@ -14,9 +14,9 @@ class FormCollectionTypeClass {
 		for (let i=0;i<this.labels.length;i++) {
 			this.tablabel.push(this.labels[i].textContent);
 		}
-		this.edit_label();
 		this.tab1=this.ol.getElementsByTagName("li");
-		this.create_button(this.tab1[0],"delete");
+		this.ol.removeChild(this.tab1[0]);
+		this.edit_label();
 		this.idbuttonadd=document.getElementById(idbuttonadd);
 		this.create_button(this.idbuttonadd,"add");
 	}
