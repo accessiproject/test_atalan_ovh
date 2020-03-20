@@ -11,7 +11,24 @@
                 <div class="form-group">
                     {{ form_row(form.type) }}
                 </div>
+                <ol id="idOlAssistiveTechnology" class="assistiveTechnologies" data-prototype="{{ form_widget(form.assistiveTechnologies.vars.prototype)|e('html_attr') }}">
+                {% for assistiveTechnology in form.assistiveTechnologies %}
+                    <li>
+                        {{ form_row(assistiveTechnology.name) }}
+                    </li>
+                {% endfor %}
+            </ol>
+            <div id="add_button"></div>
             </fieldset>
             <button type="submit">Enregistrer</button>
         {{ form_end(form) }}
+<script src="{{ asset('_js/formCollectionTypeClass.js') }}"></script>
+<script>
+
+function assistivetechnology() {
+	let assistivetechnology = new FormCollectionTypeClass("idOlAssistiveTechnology","add_button","Supprimer cet élément","Ajouter une technologie d'assistance","<h4>","Composant","</h4>");
+}
+assistivetechnology();
+
+</script>
 {% endblock %}

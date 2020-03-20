@@ -16,17 +16,17 @@ class Category
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $type;
+    protected $type;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AssistiveTechnology", mappedBy="category", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\AssistiveTechnology", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
      */
-    private $assistiveTechnologies;
+    protected $assistiveTechnologies;
 
     public function __construct()
     {
@@ -63,6 +63,7 @@ class Category
         if (!$this->assistiveTechnologies->contains($assistiveTechnology)) {
             $this->assistiveTechnologies[] = $assistiveTechnology;
             $assistiveTechnology->setCategory($this);
+            $this->assistiveTechnologies->add($assistiveTechnology);
         }
 
         return $this;

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Entity\AssistiveTechnology;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,9 +39,12 @@ class AssistivetechnologyController extends AbstractController
         else
             $category = new Category();
         
+        $assistiveTechnology = new AssistiveTechnology();
+        $category->getAssistiveTechnologies()->add($assistiveTechnology);
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $assistiveTechnology->setCategory($category);
             // Enregistre le sondage en base
             $manager->persist($category);
             $manager->flush();
