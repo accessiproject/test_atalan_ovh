@@ -29,7 +29,6 @@ class SurveyController extends AbstractController
         return $this->render('survey/list.html.twig', [
             'controller_name' => 'SurveyController',
             'surveys' => $surveys,
-            'os' => $os,
         ]);
     }
 
