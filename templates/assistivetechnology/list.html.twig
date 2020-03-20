@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Technologies d'assistance{% endblock %}
+
+{% block body %}
+    <h1>Technologies d'assistance</h1>
+    <p><a href="">Ajouter une nouvelle technologie d'assistance</a></p>     
+    <table>
+        <thead>
+            <th>Type de technologie d'assistance</th>
+            <th>Technologies d'assistance</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.type }}</td>
+                    <td>
+                        <ol>
+                            {% for assistivetechnology in category.assistivetechnologies %}
+                                <li>{{ assistivetechnology.name }}</li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                    <td><a role="button" href="">Modifier</a></td>
+                    <td><a role="button" href="">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
