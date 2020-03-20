@@ -5,8 +5,10 @@ namespace App\DataFixtures;
 use Faker;
 use App\Entity\User;
 use App\Entity\Survey;
+use App\Entity\Category;
 use App\Entity\Proposition;
 use App\Entity\TechnicalComponent;
+use App\Entity\AssistiveTechnology;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -40,6 +42,30 @@ class AppFixtures extends Fixture
             $user->setPassword($password);
             $user->updatedTimestamps();
             $manager->persist($user);
+        }
+
+        //initialisation des categories
+        $type=["Synthèse vocale","Logiciel de grossissement","Plage braille"];
+        for ($i = 0; $i < count($type); $i++) {
+            $category = new Category();
+            $category->setType($type[$i]);
+            
+            //initialisation des aides techniques
+            if ($type[$i]=="Synthèse vocale")
+                $tab=["JAWS","NVDA","ORCA","VoiceOver"];
+            else if ($type[$i]=="Logiciel de grossissement")
+                $tab=["ZoomText","Loupe de Windows"];
+            else
+                $tab=["Plage braille"];
+            
+            for ($j = 0; $j < count($tab); $j++) {    
+                $assistiveTechnology = new AssistiveTechnology();
+                $assistiveTechnology->setName($tab[$j]);
+                $assistiveTechnology->setCategory($category);
+                $manager->persist($assistiveTechnology);
+            }
+            $manager->persist($category);
+            $manager->flush();
         }
 
         //initialisation des sondages
