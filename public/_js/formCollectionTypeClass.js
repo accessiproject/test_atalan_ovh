@@ -1,5 +1,5 @@
 class FormCollectionTypeClass {
-	constructor(idol,idbuttonadd,libelle_delete,libelle_add,cpt,tagtitlestart,title,tagtitleend) {
+	constructor(idol,idbuttonadd,libelle_delete,libelle_add,tagtitlestart,title,tagtitleend) {
 		this.idol=idol;
 		this.idbuttonadd=idbuttonadd;
 		this.libelle_delete=libelle_delete;
@@ -15,8 +15,13 @@ class FormCollectionTypeClass {
 			this.tablabel.push(this.labels[i].textContent);
 		}
 		this.tab1=this.ol.getElementsByTagName("li");
-		this.ol.removeChild(this.tab1[0]);
-		this.edit_label();
+		if (this.tab1.length>1) {
+			this.ol.removeChild(this.tab1[this.tab1.length-1]);
+			for (let i=0;i<this.tab1.length;i++)
+				this.create_button(this.tab1[i],"delete");
+		} else
+			this.ol.removeChild(this.tab1[0]);
+			this.edit_label();
 		this.idbuttonadd=document.getElementById(idbuttonadd);
 		this.create_button(this.idbuttonadd,"add");
 	}
@@ -57,15 +62,11 @@ class FormCollectionTypeClass {
 	
 	add() {
 		this.data=this.ol.getAttribute("data-prototype");
-		this.data=this.data.replace(/__name__/g, cpt++);
+		this.data=this.data.replace(/__name__/g, this.number);
 		this.x=document.createElement("li");
 		this.x.innerHTML=this.data;
 		this.create_button(this.x,"delete");
 		this.ol.appendChild(this.x);
 		this.edit_label();
-	}
-
-	hierarchy(param) {
-		this.title=param.innerHTML="<h4>Test</h4>";
 	}
 }
