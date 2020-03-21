@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use WhichBrowser;
+use App\Entity\Answer;
 use App\Entity\Survey;
+use App\Form\AnswerType;
 use App\Form\SurveyType;
 use App\Entity\Proposition;
 use App\Entity\TechnicalComponent;
@@ -11,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use WhichBrowser;
 
 
 /**
@@ -74,8 +76,12 @@ class SurveyController extends AbstractController
     public function survey_show($id)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
+        
+        $answer = new Answer();
+        $form = $this->createForm(AnswerType::class, $answer);
         return $this->render('survey/show.html.twig', [
             'controller_name' => 'SurveyController',
+            'form' => $form->createView(),
             'survey' => $survey,
         ]);
     }
