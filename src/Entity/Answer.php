@@ -99,9 +99,15 @@ class Answer
      */
     private $propositions;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\AssistiveTechnology", inversedBy="answers")
+     */
+    private $assistives;
+
     public function __construct()
     {
         $this->propositions = new ArrayCollection();
+        $this->assistives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -310,6 +316,32 @@ class Answer
     {
         if ($this->propositions->contains($proposition)) {
             $this->propositions->removeElement($proposition);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AssistiveTechnology[]
+     */
+    public function getAssistives(): Collection
+    {
+        return $this->assistives;
+    }
+
+    public function addAssistive(AssistiveTechnology $assistive): self
+    {
+        if (!$this->assistives->contains($assistive)) {
+            $this->assistives[] = $assistive;
+        }
+
+        return $this;
+    }
+
+    public function removeAssistive(AssistiveTechnology $assistive): self
+    {
+        if ($this->assistives->contains($assistive)) {
+            $this->assistives->removeElement($assistive);
         }
 
         return $this;
