@@ -24,13 +24,13 @@ class Category
     protected $type;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AssistiveTechnology", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Assistive", mappedBy="category", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $assistiveTechnologies;
+    protected $assistives;
 
     public function __construct()
     {
-        $this->assistiveTechnologies = new ArrayCollection();
+        $this->assistives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,31 +51,31 @@ class Category
     }
 
     /**
-     * @return Collection|AssistiveTechnology[]
+     * @return Collection|Assistive[]
      */
-    public function getAssistiveTechnologies(): Collection
+    public function getAssistives(): Collection
     {
-        return $this->assistiveTechnologies;
+        return $this->assistives;
     }
 
-    public function addAssistiveTechnology(AssistiveTechnology $assistiveTechnology): self
+    public function addAssistive(Assistive $assistive): self
     {
-        if (!$this->assistiveTechnologies->contains($assistiveTechnology)) {
-            $this->assistiveTechnologies[] = $assistiveTechnology;
-            $assistiveTechnology->setCategory($this);
-            $this->assistiveTechnologies->add($assistiveTechnology);
+        if (!$this->assistives->contains($assistive)) {
+            $this->assistives[] = $assistive;
+            $assistive->setCategory($this);
+            $this->assistives->add($assistive);
         }
 
         return $this;
     }
 
-    public function removeAssistiveTechnology(AssistiveTechnology $assistiveTechnology): self
+    public function removeAssistive(Assistive $assistive): self
     {
-        if ($this->assistiveTechnologies->contains($assistiveTechnology)) {
-            $this->assistiveTechnologies->removeElement($assistiveTechnology);
+        if ($this->assistives->contains($assistive)) {
+            $this->assistives->removeElement($assistive);
             // set the owning side to null (unless already changed)
-            if ($assistiveTechnology->getCategory() === $this) {
-                $assistiveTechnology->setCategory(null);
+            if ($assistive->getCategory() === $this) {
+                $assistive->setCategory(null);
             }
         }
 

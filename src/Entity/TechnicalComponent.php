@@ -17,7 +17,7 @@ class TechnicalComponent
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\survey", inversedBy="technicalComponents")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Survey", inversedBy="technicalComponents")
      * @ORM\JoinColumn(nullable=false)
      */
     private $survey;

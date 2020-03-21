@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
-use App\Entity\AssistiveTechnology;
+use App\Entity\Assistive;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,24 +14,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
 * @IsGranted("ROLE_ADMIN")
 */
-class AssistivetechnologyController extends AbstractController
+class AssistiveController extends AbstractController
 {
     /**
-     * @Route("/technologies-assistance", name="assistivetechnology_list")
+     * @Route("/assistances", name="assistive_list")
      */
-    public function assistivetechnology_list()
+    public function assistive_list()
     {
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
-        return $this->render('assistivetechnology/list.html.twig', [
-            'controller_name' => 'AssistivetechnologyController',
+        return $this->render('assistive/list.html.twig', [
+            'controller_name' => 'AssistiveController',
             'categories' => $categories,
         ]);
     }
 
     /**
-     * @Route("/edition/{id}", name="assistivetechnology_edit")
+     * @Route("/edition/{id}", name="assistive_edit")
      */
-    public function assistivetechnology_edit($id, Request $request, EntityManagerInterface $manager)
+    public function assistive_edit($id, Request $request, EntityManagerInterface $manager)
     {
         
         if ($id > 0)
@@ -39,33 +39,33 @@ class AssistivetechnologyController extends AbstractController
         else
             $category = new Category();
         
-        $assistiveTechnology = new AssistiveTechnology();
-        $category->getAssistiveTechnologies()->add($assistiveTechnology);
+        $assistive = new Assistive();
+        $category->getAssistives()->add($assistive);
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $assistiveTechnology->setCategory($category);
+            $assistive->setCategory($category);
             // Enregistre le sondage en base
             $manager->persist($category);
             $manager->flush();
             
-            return $this->redirectToRoute('assistivetechnology_list');
+            return $this->redirectToRoute('assistive_list');
         }
-        return $this->render('assistivetechnology/edit.html.twig', [
-            'controller_name' => 'AssistivetechnologyController',
+        return $this->render('assistive/edit.html.twig', [
+            'controller_name' => 'AssistiveController',
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/suppression/{id}", name="assistivetechnology_delete")
+     * @Route("/suppression/{id}", name="assistive_delete")
      */
-    public function assistivetechnology_delete($id, EntityManagerInterface $manager)
+    public function assistive_delete($id, EntityManagerInterface $manager)
     {
         $category = $manager->getRepository(Category::class)->find($id);
         $manager->remove($category);
         $manager->flush();    
-        return $this->redirectToRoute('assistivetechnology_list', [
+        return $this->redirectToRoute('assistive_list', [
             'id' => $category->getId(),
         ]);
     }

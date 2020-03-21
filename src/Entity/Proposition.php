@@ -19,7 +19,7 @@ class Proposition
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\survey", inversedBy="propositions")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Survey", inversedBy="propositions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $survey;

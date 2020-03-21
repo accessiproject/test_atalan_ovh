@@ -14,8 +14,8 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('type');
-            $builder->add('assistiveTechnologies', CollectionType::class, [
-                'entry_type' => AssistiveTechnologyType::class,
+            $builder->add('assistives', CollectionType::class, [
+                'entry_type' => AssistiveType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,

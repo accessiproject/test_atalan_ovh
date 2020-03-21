@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Technologies d'assistance</h1>
-    <p><a href="{{ path('assistivetechnology_edit', {'id': 0}) }}">Ajouter un nouveau type de technologie d'assistance</a></p>     
+    <p><a href="{{ path('assistive_edit', {'id': 0}) }}">Ajouter un nouveau type de technologie d'assistance</a></p>     
     <table>
         <thead>
             <th>Type de technologie d'assistance</th>
@@ -18,13 +18,13 @@
                     <td>{{ category.type }}</td>
                     <td>
                         <ol>
-                            {% for assistivetechnology in category.assistivetechnologies %}
-                                <li>{{ assistivetechnology.name }}</li>
+                            {% for assistive in category.assistives %}
+                                <li>{{ assistive.name }}</li>
                             {% endfor %}
                         </ol>
                     </td>
-                    <td><a role="button" href="{{ path('assistivetechnology_edit', {'id': category.id}) }}"">Modifier</a></td>
-                    <td><a role="button" href="{{ path('assistivetechnology_delete', {'id': category.id}) }}">Supprimer</a></td>
+                    <td><a role="button" href="{{ path('assistive_edit', {'id': category.id}) }}"">Modifier</a></td>
+                    <td><a role="button" href="{{ path('assistive_delete', {'id': category.id}) }}">Supprimer</a></td>
                 </tr>
             {% endfor %}
         </tbody>

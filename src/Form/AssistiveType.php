@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\AssistiveTechnology;
+use App\Entity\Assistive;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class AssistiveTechnologyType extends AbstractType
+class AssistiveType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,7 +19,7 @@ class AssistiveTechnologyType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => AssistiveTechnology::class,
+            'data_class' => Assistive::class,
         ]);
     }
 }

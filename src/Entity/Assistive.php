@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AssistiveTechnologyRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AssistiveRepository")
  */
-class AssistiveTechnology
+class Assistive
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,7 @@ class AssistiveTechnology
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="assistiveTechnologies")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="assistives")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;

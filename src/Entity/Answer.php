@@ -19,7 +19,7 @@ class Answer
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\survey", inversedBy="answers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Survey", inversedBy="answers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $survey;
@@ -95,12 +95,12 @@ class Answer
     private $createdat;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\proposition", inversedBy="answers")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Proposition", inversedBy="answers")
      */
     private $propositions;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\AssistiveTechnology", inversedBy="answers")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Assistive", inversedBy="answers")
      */
     private $assistives;
 
@@ -322,14 +322,14 @@ class Answer
     }
 
     /**
-     * @return Collection|AssistiveTechnology[]
+     * @return Collection|Assistive[]
      */
     public function getAssistives(): Collection
     {
         return $this->assistives;
     }
 
-    public function addAssistive(AssistiveTechnology $assistive): self
+    public function addAssistive(Assistive $assistive): self
     {
         if (!$this->assistives->contains($assistive)) {
             $this->assistives[] = $assistive;
@@ -338,7 +338,7 @@ class Answer
         return $this;
     }
 
-    public function removeAssistive(AssistiveTechnology $assistive): self
+    public function removeAssistive(Assistive $assistive): self
     {
         if ($this->assistives->contains($assistive)) {
             $this->assistives->removeElement($assistive);

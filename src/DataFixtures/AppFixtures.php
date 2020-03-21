@@ -9,7 +9,7 @@ use App\Entity\Survey;
 use App\Entity\Category;
 use App\Entity\Proposition;
 use App\Entity\TechnicalComponent;
-use App\Entity\AssistiveTechnology;
+use App\Entity\Assistive;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -64,10 +64,10 @@ class AppFixtures extends Fixture
             
             for ($j = 0; $j < count($tab); $j++)
             {    
-                $assistiveTechnology = new AssistiveTechnology();
-                $assistiveTechnology->setName($tab[$j]);
-                $assistiveTechnology->setCategory($category);
-                $manager->persist($assistiveTechnology);
+                $assistive = new Assistive();
+                $assistive->setName($tab[$j]);
+                $assistive->setCategory($category);
+                $manager->persist($assistive);
             }
             $manager->persist($category);
             $manager->flush();
@@ -124,11 +124,9 @@ class AppFixtures extends Fixture
                         $nb = 1;
 
                     for ($l = 0; $l < $nb; $l++) {
-                        $assistiveTechnology = new AssistiveTechnology();
-                        $assistiveTechnology->setName($faker->word);
-                        $assistiveTechnology->setCategory($category);
-
-
+                        $assistive = new Assistive();
+                        $assistive->setName($faker->word);
+                        $assistive->setCategory($category);
 
                         //creation answers
                         for ($n = 1; $n <= 3; $n++) {
@@ -178,10 +176,10 @@ class AppFixtures extends Fixture
                             $answer->setAcceptedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null));
                             $answer->setCreatedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null));
                             $answer->addProposition($proposition);
-                            $answer->addAssistive($assistiveTechnology);
+                            $answer->addAssistive($assistive);
                             $manager->persist($answer);
                         }
-                        $manager->persist($assistiveTechnology);
+                        $manager->persist($assistive);
                     }
                     $manager->persist($category);
                 }

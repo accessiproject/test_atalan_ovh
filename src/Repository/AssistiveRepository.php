@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\AssistiveTechnology;
+use App\Entity\Assistive;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method AssistiveTechnology|null find($id, $lockMode = null, $lockVersion = null)
- * @method AssistiveTechnology|null findOneBy(array $criteria, array $orderBy = null)
- * @method AssistiveTechnology[]    findAll()
- * @method AssistiveTechnology[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Assistive|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Assistive|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Assistive[]    findAll()
+ * @method Assistive[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AssistiveTechnologyRepository extends ServiceEntityRepository
+class AssistiveRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, AssistiveTechnology::class);
+        parent::__construct($registry, Assistive::class);
     }
 
     // /**
-    //  * @return AssistiveTechnology[] Returns an array of AssistiveTechnology objects
+    //  * @return Assistive[] Returns an array of Assistive objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class AssistiveTechnologyRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?AssistiveTechnology
+    public function findOneBySomeField($value): ?Assistive
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
