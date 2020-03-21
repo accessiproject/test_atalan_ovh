@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -91,6 +93,16 @@ class Answer
      * @ORM\Column(type="datetime")
      */
     private $createdat;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\proposition", inversedBy="answers")
+     */
+    private $propositions;
+
+    public function __construct()
+    {
+        $this->propositions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -273,6 +285,32 @@ class Answer
     public function setCreatedat(\DateTimeInterface $createdat): self
     {
         $this->createdat = $createdat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|proposition[]
+     */
+    public function getPropositions(): Collection
+    {
+        return $this->propositions;
+    }
+
+    public function addProposition(proposition $proposition): self
+    {
+        if (!$this->propositions->contains($proposition)) {
+            $this->propositions[] = $proposition;
+        }
+
+        return $this;
+    }
+
+    public function removeProposition(proposition $proposition): self
+    {
+        if ($this->propositions->contains($proposition)) {
+            $this->propositions->removeElement($proposition);
+        }
 
         return $this;
     }

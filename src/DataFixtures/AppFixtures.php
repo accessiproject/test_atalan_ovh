@@ -85,6 +85,7 @@ class AppFixtures extends Fixture
             $survey->setClosedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+30 days', $timezone = null));
             
             //creation propositions
+            /*
             for ($j = 1; $j <= 3; $j++)
             {
                 $proposition = new Proposition();
@@ -92,6 +93,7 @@ class AppFixtures extends Fixture
                 $proposition->setWording($faker->sentence($nbWords = 6, $variableNbWords = true));
                 $manager->persist($proposition);
             }
+            */
             
             //creation TechnicalComponents
             for ($j = 1; $j <= 3; $j++)
@@ -104,8 +106,15 @@ class AppFixtures extends Fixture
                 $manager->persist($technicalcomponent);
             }
 
+            //creation propositions
+            for ($j = 1; $j <= 3; $j++)
+            {
+                $proposition = new Proposition();
+                $proposition->setSurvey($survey);
+                $proposition->setWording($faker->sentence($nbWords = 6, $variableNbWords = true));
+                
             //creation answers
-            for ($j = 1; $j <= 10; $j++)
+            for ($k = 1; $k <= 10; $k++)
             {
                 $answer = new Answer();
                 $answer->setSurvey($survey);
@@ -154,7 +163,10 @@ class AppFixtures extends Fixture
                 $answer->setAccept(true);
                 $answer->setAcceptedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null));
                 $answer->setCreatedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null));
+                $answer->addProposition($proposition);
                 $manager->persist($answer);
+            }
+            $manager->persist($proposition);
             }       
             $manager->persist($survey);
             $manager->flush();
