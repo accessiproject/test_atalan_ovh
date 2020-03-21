@@ -69,9 +69,9 @@ class Survey
     protected $technicalComponents;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="survey", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="survey", cascade={"persist"}, orphanRemoval=true)
      */
-    private $answers;
+    protected $answers;
 
     public function __construct()
     {
