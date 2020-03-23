@@ -97,7 +97,7 @@ class Answer
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Proposition", inversedBy="answers")
      */
-    private $propositions;
+    protected $propositions;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Assistive", inversedBy="answers")

@@ -9,6 +9,7 @@ use App\Form\AnswerType;
 use App\Form\SurveyType;
 use App\Entity\Proposition;
 use App\Entity\TechnicalComponent;
+use App\Repository\PropositionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,9 +77,11 @@ class SurveyController extends AbstractController
     public function survey_show($id)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
-        
         $answer = new Answer();
-        $form = $this->createForm(AnswerType::class, $answer);
+        $form = $this->createForm(AnswerType::class, $answer, array(
+            'survey' => $survey->getId(),
+            'multiple' => $survey->getMultiple(),
+        ));
         return $this->render('survey/show.html.twig', [
             'controller_name' => 'SurveyController',
             'form' => $form->createView(),
