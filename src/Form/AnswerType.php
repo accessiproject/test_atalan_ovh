@@ -17,18 +17,27 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AnswerType extends AbstractType
 {
-    
-    
-    
+
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $survey = $options['survey'];
         $multiple = $options['multiple'];
-        if ($multiple==1)
-            $param=false;
+
+        if ($multiple == 1)
+            $param = "true";
         else
-            $param=true;
-        
+            $param = "false";
+
+        $choices = array();
+        foreach ($options['propositions'] as $proposition) {
+            $id = $proposition->getId();
+            $wording = $proposition->getWording();
+            $choices[$wording] = $id;
+        }
+
+
         $builder
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire (facultatif) :',
@@ -41,11 +50,17 @@ class AnswerType extends AbstractType
             ->add('accept', CheckboxType::class, [
                 'label' => 'J\'accepte de partager mes données techniques à la Société Atalan.',
             ]);
-            /*
+        if ($param == "false") {
+            $builder->add('propositions', ChoiceType::class, array(
+                'choices' => $choices,
+                'expanded' => true,
+                'multiple' => false,
+            ));
+        } else {
             $builder->add('propositions', EntityType::class, [
                 'class' => Proposition::class,
                 'expanded' => true,
-                'multiple' => $param,
+                'multiple' => true,
                 'query_builder' => function (EntityRepository $proposition) use ($survey) {
                     return $proposition->createQueryBuilder('u')
                         ->where('u.survey = :survey')
@@ -53,6 +68,9 @@ class AnswerType extends AbstractType
                 },
                 'choice_label' => 'wording',
             ]);
+        }
+        /*
+            
             ->add('assistives');
             */
     }
@@ -63,7 +81,7 @@ class AnswerType extends AbstractType
             'data_class' => Answer::class,
             'survey' => null,
             'multiple' => null,
-            'propositions' => [],
+            'propositions' => null,
         ]);
     }
 }

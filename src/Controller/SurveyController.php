@@ -74,15 +74,29 @@ class SurveyController extends AbstractController
     /**
      * @Route("/consultation/{id}", name="survey_show")
      */
-    public function survey_show($id)
+    public function survey_show($id, Request $request, EntityManagerInterface $manager)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer, array(
             'survey' => $survey->getId(),
             'multiple' => $survey->getMultiple(),
+            'propositions' => $survey->getPropositions(),
         ));
-        return $this->render('survey/show.html.twig', [
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $answer->setSurvey($survey);
+            $answer->setCreatedat(new \DateTime('now'));
+            $answer->setAcceptedat(new \DateTime('now'));
+            foreach($form["propositions"]->getData() as $proposition) {
+                $answer->addProposition($proposition);
+            }
+            $manager->persist($answer);
+            $manager->flush();
+            return $this->redirectToRoute('survey_list');
+        }
+            return $this->render('survey/show.html.twig', [
             'controller_name' => 'SurveyController',
             'form' => $form->createView(),
             'survey' => $survey,

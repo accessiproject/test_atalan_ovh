@@ -302,7 +302,7 @@ class Answer
     {
         return $this->propositions;
     }
-
+    
     public function addProposition(proposition $proposition): self
     {
         if (!$this->propositions->contains($proposition)) {
