@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\FormInterface;
 
 class AnswerType extends AbstractType
 {
@@ -34,7 +36,7 @@ class AnswerType extends AbstractType
         foreach ($options['propositions'] as $proposition) {
             $id = $proposition->getId();
             $wording = $proposition->getWording();
-            $choices[$wording] = $id;
+            $choices[$wording] = $wording;
         }
 
 
@@ -68,11 +70,8 @@ class AnswerType extends AbstractType
                 },
                 'choice_label' => 'wording',
             ]);
-        }
-        /*
-            
-            ->add('assistives');
-            */
+        }    
+        //$builder->add('assistives');
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -82,6 +81,11 @@ class AnswerType extends AbstractType
             'survey' => null,
             'multiple' => null,
             'propositions' => null,
+            'empty_data' => function (FormInterface $form) {
+                return new Money(
+                    $form->get('propositions')->getData()
+                );
+            },
         ]);
     }
 }

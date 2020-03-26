@@ -84,7 +84,6 @@ class SurveyController extends AbstractController
             'propositions' => $survey->getPropositions(),
         ));
         $form->handleRequest($request);
-        
         if ($form->isSubmitted() && $form->isValid()) {
             $answer->setSurvey($survey);
             $answer->setCreatedat(new \DateTime('now'));
@@ -115,4 +114,17 @@ class SurveyController extends AbstractController
             'id' => $survey->getId(),
         ]);
     }
+
+    /**
+     * @Route("/result/{id}", name="survey_result")
+     */
+    public function survey_result($id)
+    {
+        $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
+        return $this->render('survey/result.html.twig', [
+            'controller_name' => 'SurveyController',
+            'survey' => $survey,
+        ]);
+    }
+
 }

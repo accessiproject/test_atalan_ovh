@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Résultats du sondage {{ survey.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>Résultats du sondage {{ survey.title }}</h1>
+    <div class='form-group'>
+        <p>Rappel : {{ survey.question }}</p>
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <caption>
+            <h2>1 - Synthèse des résultats</h2>
+        </caption>
+        <tr>
+            <th>Proposition</th>
+            <th>Résultat</th>
+        </tr>
+        {% for proposition in survey.propositions %}
+            <tr>
+                <td>{{ proposition.wording }}</td>
+                <td>{{ proposition.answers|length }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

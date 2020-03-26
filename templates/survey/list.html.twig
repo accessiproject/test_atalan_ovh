@@ -27,7 +27,7 @@
                 <td><a role="button" class="btn btn-info" href="{{ path('survey_show', {'id': survey.id}) }}">Voir</a></td>
                 <td><a role="button" class="btn btn-info" href="{{ path('survey_edit', {'id': survey.id}) }}">Modifier</a></td>
                 <td><a role="button" class="btn btn-danger" href="{{ path('survey_delete', {'id': survey.id}) }}">Supprimer</a></td>
-                <td><a role="button" class="btn btn-info" href="">Voir les résultats ({{ survey.answers|length }})</a></td>
+                <td><a role="button" class="btn btn-info" href="{{ path('survey_result', {'id': survey.id}) }}">Voir les résultats ({{ survey.answers|length }})</a></td>
                 <td><a role="button" class="btn btn-info" href="{{ path('answer_list', {'id': survey.id}) }}">Gérer</a></td>
                 <td>
                     <a id="post-shortlink" role="button" href="">

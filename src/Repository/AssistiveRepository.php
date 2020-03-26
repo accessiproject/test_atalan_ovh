@@ -19,6 +19,27 @@ class AssistiveRepository extends ServiceEntityRepository
         parent::__construct($registry, Assistive::class);
     }
 
+    /*
+    public function findAssistive($price, $includeUnavailableProducts = false): array
+{
+    $qb = $this->createQueryBuilder('p')
+        ->where('p.price > :price')
+        ->setParameter('price', $price)
+        ->orderBy('p.price', 'ASC');
+
+    if (!$includeUnavailableProducts) {
+        $qb->andWhere('p.available = TRUE')
+    }
+
+    $query = $qb->getQuery();
+
+    return $query->execute();
+}
+
+    // to get just one result:
+    // $product = $query->setMaxResults(1)->getOneOrNullResult();
+}
+*/
     // /**
     //  * @return Assistive[] Returns an array of Assistive objects
     //  */
