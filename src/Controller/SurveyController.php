@@ -12,6 +12,7 @@ use App\Entity\TechnicalComponent;
 use App\Repository\PropositionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -91,6 +92,9 @@ class SurveyController extends AbstractController
             foreach($form["propositions"]->getData() as $proposition) {
                 $answer->addProposition($proposition);
             }
+            foreach($form["assistives"]->getData() as $assistive) {
+                $answer->addAssistive($assistive);
+            }
             $manager->persist($answer);
             $manager->flush();
             return $this->redirectToRoute('survey_list');
@@ -127,4 +131,19 @@ class SurveyController extends AbstractController
         ]);
     }
 
+    /**
+    * @Route("/ajax", name="survey_ajax")
+    */
+   public function survey_ajax(Request $request)
+   {
+       $param = $request->request->get('device');
+        $answers = $this->getDoctrine()->getRepository(Answer::class)->findSelectResult(1,$param);
+       $responseArray = array();
+       foreach($answers as $answer) {
+           $responseArray[] = array(
+               "email" => $answer->getEmail(),
+           );
+       }
+       return new JsonResponse($responseArray);
+   }
 }

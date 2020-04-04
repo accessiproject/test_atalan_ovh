@@ -24,4 +24,76 @@
             </tr>
         {% endfor %}
     </table>
+    <table id="result">
+        <thead>
+            <th>
+                <select aria-label="Filtrer par proposition" id="proposition"></select>
+            </th>
+            <th>
+                <select aria-label="Filtrer par answer" id="answer"></select>
+            </th>
+            <th>
+                <select aria-label="Filtrer par device" id="device"></select>
+            </th>
+            <th>
+                <select aria-label="Filtrer par os" id="os"></select>
+            </th>
+            <th>
+                <select aria-label="Filtrer par browser" id="browser"></select>
+            </th>
+            <th>
+                <select aria-label="Filtrer par assistive" id="assistive"></select>
+            </th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+
+    //objet ajax
+    function getXmlhttp() {
+        if (window.XMLHttpRequest)
+            return new XMLHttpRequest();
+        else if (window.ActiveXObject)
+            return new ActiveXObject("Msxml2.XMLHTTP");
+        else
+            throw new Error("Could not create HTTP request object.");
+    }
+    
+    /*
+    let selects = result.getElementsByTagName("select");
+    var select = document.getElementById("device");
+
+    for (let i=0;i<tab.length;i++) {
+        opt=document.createElement("option");
+        opt.innerHTML=tab[i].deviceType;
+        opt.value=i;
+        select.appendChild(opt);
+    }
+    */
+
+    //script ajax
+    function list() {
+        var para="device=a.email";
+        xmlhttp= getXmlhttp();
+        xmlhttp.open("GET","http://127.0.0.1:8000/ajax?device=a.email",true);
+        
+        xmlhttp.onreadystatechange=mafonction;
+        xmlhttp.send();
+        function mafonction() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                let tab = JSON.parse(xmlhttp.responseText);     
+                var select = document.getElementById("device");
+                for (let i=0;i<tab.length;i++) {    
+                    opt=document.createElement("option");
+                    opt.innerHTML=tab[i].email;
+                    opt.value=i;
+                    select.appendChild(opt);   
+                }
+            }
+        }
+    }
+
+    list();
+    </script>
 {% endblock %}

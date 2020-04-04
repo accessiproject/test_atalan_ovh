@@ -3,10 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Answer;
+use App\Entity\Assistive;
 use App\Entity\Proposition;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\PropositionRepository;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,8 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class AnswerType extends AbstractType
 {
@@ -36,7 +38,7 @@ class AnswerType extends AbstractType
         foreach ($options['propositions'] as $proposition) {
             $id = $proposition->getId();
             $wording = $proposition->getWording();
-            $choices[$wording] = $wording;
+            $choices[$wording] = $id;
         }
 
 
@@ -53,10 +55,11 @@ class AnswerType extends AbstractType
                 'label' => 'J\'accepte de partager mes données techniques à la Société Atalan.',
             ]);
         if ($param == "false") {
+            
             $builder->add('propositions', ChoiceType::class, array(
                 'choices' => $choices,
                 'expanded' => true,
-                'multiple' => false,
+                'multiple' => false
             ));
         } else {
             $builder->add('propositions', EntityType::class, [
@@ -71,7 +74,14 @@ class AnswerType extends AbstractType
                 'choice_label' => 'wording',
             ]);
         }    
-        //$builder->add('assistives');
+        
+        $builder->add('assistives', entityType::class, [
+            'class' => Assistive::class,
+            'expanded' => true,
+            'multiple' => true,
+            'choice_label' => 'name',
+        ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -81,11 +91,6 @@ class AnswerType extends AbstractType
             'survey' => null,
             'multiple' => null,
             'propositions' => null,
-            'empty_data' => function (FormInterface $form) {
-                return new Money(
-                    $form->get('propositions')->getData()
-                );
-            },
         ]);
     }
 }

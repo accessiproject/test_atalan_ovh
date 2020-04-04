@@ -62,6 +62,9 @@ class FormCollectionTypeClass {
 	
 	add() {
 		this.data=this.ol.getAttribute("data-prototype");
+		if (this.number==null)
+			this.number=0;
+			
 		this.data=this.data.replace(/__name__/g, this.number);
 		this.x=document.createElement("li");
 		this.x.innerHTML=this.data;
