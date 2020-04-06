@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Answer;
 use App\Entity\Assistive;
+use App\Entity\Category;
 use App\Entity\Proposition;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
@@ -41,7 +42,6 @@ class AnswerType extends AbstractType
             $wording = $proposition->getWording();
             $choices[$wording] = $id;
         }
-
 
         $builder
             ->add('comment', TextareaType::class, [
@@ -82,10 +82,16 @@ class AnswerType extends AbstractType
         $builder
             ->add('assistives', entityType::class, [
                 'class' => Assistive::class,
-                'expanded' => true,
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+                    ->orderBy('t.name', 'ASC');
+                },
+                'group_by' => 'category.type',
                 'multiple' => true,
-                'choice_label' => 'name',
+                'expanded' => true,
+                'empty_data' => true,
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

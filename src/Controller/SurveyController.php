@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use WhichBrowser;
 use App\Entity\Answer;
+use App\Entity\Assistive;
+use App\Entity\Category;
 use App\Entity\Survey;
 use App\Form\AnswerType;
 use App\Form\SurveyType;
@@ -78,6 +80,8 @@ class SurveyController extends AbstractController
     public function survey_show($id, Request $request, EntityManagerInterface $manager)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
+        $countAssistiveByCategory = $this->getDoctrine()->getRepository(Assistive::class)->nombreAssistive();
+        var_dump($countAssistiveByCategory);
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer, array(
             'survey' => $survey->getId(),

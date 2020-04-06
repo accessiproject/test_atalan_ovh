@@ -38,7 +38,6 @@
     <div class='form-group'>
         <h2>Aides techniques utilisées :</h2>
         <p>Quelle(s) aide(s) technique(s) avez-vous utilisé pendant ce test?</p>
-        {{ form_widget(form.assistives) }}
     </div>
     <div class="form-group">
         {{ form_row(form.accept) }}
@@ -47,6 +46,9 @@
         <hr>
         <input class="btn btn-success" type="submit" name="btSubmit" value="Enregistrer ma réponse" />
     </div>
+    {% for assistive in form.assistives %}
+        {{ form_widget(assistive.name) }}
+    {% endfor %}
     {{ form_end(form) }}
     <div class='form-group'>
         <hr>
