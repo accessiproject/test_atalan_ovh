@@ -302,6 +302,16 @@ class Answer
     {
         return $this->propositions;
     }
+
+    public function setPropositions($data)
+    {
+        if (is_array($data)) {
+            $this->propositions=$data;
+        } else {
+            $this->propositions->clear();
+            $this->propositions->add($data);
+        }
+    }
     
     public function addProposition(proposition $proposition): self
     {

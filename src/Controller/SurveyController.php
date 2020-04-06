@@ -89,8 +89,12 @@ class SurveyController extends AbstractController
             $answer->setSurvey($survey);
             $answer->setCreatedat(new \DateTime('now'));
             $answer->setAcceptedat(new \DateTime('now'));
-            foreach($form["propositions"]->getData() as $proposition) {
-                $answer->addProposition($proposition);
+            if ($survey->getMultiple()>0) {
+                foreach($form["propositions"]->getData() as $proposition)
+                    $answer->addProposition($proposition);
+            } else {
+                $proposition = $this->getDoctrine()->getRepository(Proposition::class)->find($form['propositions']->getData());
+                $answer->setPropositions($proposition);
             }
             foreach($form["assistives"]->getData() as $assistive) {
                 $answer->addAssistive($assistive);

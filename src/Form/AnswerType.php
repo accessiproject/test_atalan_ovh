@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\PropositionRepository;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Doctrine\ORM\EntityManagerInterface;
 
 class AnswerType extends AbstractType
 {
@@ -56,32 +57,35 @@ class AnswerType extends AbstractType
             ]);
         if ($param == "false") {
             
-            $builder->add('propositions', ChoiceType::class, array(
-                'choices' => $choices,
-                'expanded' => true,
-                'multiple' => false
-            ));
+            $builder
+                ->add('propositions', ChoiceType::class, array(
+                    'choices' => $choices,
+                    'expanded' => true,
+                    'multiple' => false
+                ));
+
         } else {
-            $builder->add('propositions', EntityType::class, [
-                'class' => Proposition::class,
-                'expanded' => true,
-                'multiple' => true,
-                'query_builder' => function (EntityRepository $proposition) use ($survey) {
-                    return $proposition->createQueryBuilder('u')
-                        ->where('u.survey = :survey')
-                        ->setParameter('survey', $survey);
-                },
-                'choice_label' => 'wording',
-            ]);
+            $builder
+                ->add('propositions', EntityType::class, [
+                    'class' => Proposition::class,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'query_builder' => function (EntityRepository $proposition) use ($survey) {
+                        return $proposition->createQueryBuilder('u')
+                            ->where('u.survey = :survey')
+                            ->setParameter('survey', $survey);
+                    },
+                    'choice_label' => 'wording',
+                ]);
         }    
         
-        $builder->add('assistives', entityType::class, [
-            'class' => Assistive::class,
-            'expanded' => true,
-            'multiple' => true,
-            'choice_label' => 'name',
-        ]);
-
+        $builder
+            ->add('assistives', entityType::class, [
+                'class' => Assistive::class,
+                'expanded' => true,
+                'multiple' => true,
+                'choice_label' => 'name',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -93,4 +97,6 @@ class AnswerType extends AbstractType
             'propositions' => null,
         ]);
     }
+
+    
 }
