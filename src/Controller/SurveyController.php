@@ -80,13 +80,13 @@ class SurveyController extends AbstractController
     public function survey_show($id, Request $request, EntityManagerInterface $manager)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
-        $countAssistiveByCategory = $this->getDoctrine()->getRepository(Assistive::class)->nombreAssistive();
-        var_dump($countAssistiveByCategory);
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer, array(
             'survey' => $survey->getId(),
             'multiple' => $survey->getMultiple(),
             'propositions' => $survey->getPropositions(),
+            'categories' => $categories,
         ));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -100,8 +100,11 @@ class SurveyController extends AbstractController
                 $proposition = $this->getDoctrine()->getRepository(Proposition::class)->find($form['propositions']->getData());
                 $answer->setPropositions($proposition);
             }
-            foreach($form["assistives"]->getData() as $assistive) {
-                $answer->addAssistive($assistive);
+            foreach ($_POST as $cle=>$valeur) {
+                if (strstr($cle,"category")) {
+                    $assistive = $this->getDoctrine()->getRepository(Assistive::class)->find($valeur);
+                    $answer->addAssistive($assistive);
+                }
             }
             $manager->persist($answer);
             $manager->flush();
@@ -111,6 +114,7 @@ class SurveyController extends AbstractController
             'controller_name' => 'SurveyController',
             'form' => $form->createView(),
             'survey' => $survey,
+            'categories' => $categories,
         ]);
     }
 

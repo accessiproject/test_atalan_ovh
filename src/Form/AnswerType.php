@@ -42,6 +42,29 @@ class AnswerType extends AbstractType
             $wording = $proposition->getWording();
             $choices[$wording] = $id;
         }
+        
+        $tab = array();
+        $tab1 = array();
+        foreach ($options['categories'] as $category) {
+            $idCat = $category->getId();
+            $type = $category->getType();
+            if (count($category->getAssistives())>1) {
+                foreach ($category->getAssistives() as $assistive) {    
+                    $id = $assistive->getId();
+                    $name = $assistive->getName();
+                    $tab[$type][$name]=$id;
+                    //echo $idCat . " " . $type . " : " . $name . "<br>";
+                }    
+            } else {
+                foreach ($category->getAssistives() as $assistive) {    
+                    $id = $assistive->getId();
+                    $name = $assistive->getName();
+                    $tab1[$type][$name]=$id;
+                    //echo $idCat . " " . $type . " : " . $name . "<br>";
+                }
+            }
+        }
+        
 
         $builder
             ->add('comment', TextareaType::class, [
@@ -79,18 +102,32 @@ class AnswerType extends AbstractType
                 ]);
         }    
         
+        /*
         $builder
-            ->add('assistives', entityType::class, [
+            ->add('assistives', EntityType::class, [
                 'class' => Assistive::class,
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('t')
-                    ->orderBy('t.name', 'ASC');
+                'expanded' => true,
+                'multiple' => true,
+                'group_by' => function (Category $category) {
+                    if (count($category->getAssistives())>1)
+                        return $category->getType();
                 },
-                'group_by' => 'category.type',
+                'choice_label' => 'wording',
+            ]);
+            */
+                
+        /*
+        $builder
+            ->add('assistives', EntityType::class, [
+                'class' => Assistive::class,
+                'choice_label' => 'name',
+                'group_by' => function(Assistive $assistive) {
+                    return $assistive->getCategory()->getType();
+                },
                 'multiple' => true,
                 'expanded' => true,
-                'empty_data' => true,
             ]);
+            */
 
     }
 
@@ -101,6 +138,7 @@ class AnswerType extends AbstractType
             'survey' => null,
             'multiple' => null,
             'propositions' => null,
+            'categories' => null,
         ]);
     }
 

@@ -18,16 +18,18 @@ class AssistiveRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Assistive::class);
     }
-    
-    public function nombreAssistive()
+    /*
+    public function categorysupun()
     {
+        select count(*) as nombre from assistive group by category_id having nombre=1
         return $this->createQueryBuilder('a')
-            ->select('COUNT(a.id) AS nombre')
+            ->select('COUNT(a.id) as nombre')
+            ->where('nombre>1')
             ->groupBy('a.category')
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
-    
+    */
     // /**
     
     //  * @return Assistive[] Returns an array of Assistive objects
