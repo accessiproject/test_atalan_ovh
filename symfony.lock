@@ -108,6 +108,18 @@
     "fig/link-util": {
         "version": "1.1.0"
     },
+    "friendsofsymfony/jsrouting-bundle": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.3",
+            "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
+        },
+        "files": [
+            "./config/routes/fos_js_routing.yaml"
+        ]
+    },
     "fzaninotto/faker": {
         "version": "v1.9.1"
     },
@@ -172,6 +184,18 @@
         },
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
+        ]
+    },
+    "sg/datatablesbundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "a8e5ae79a1eceec929a7393143c85ddf0ae0b4ff"
+        },
+        "files": [
+            "./config/routes/sg_datatables_bundle.yaml"
         ]
     },
     "swiftmailer/swiftmailer": {
@@ -542,6 +566,9 @@
     },
     "whichbrowser/parser": {
         "version": "v2.0.42"
+    },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"
