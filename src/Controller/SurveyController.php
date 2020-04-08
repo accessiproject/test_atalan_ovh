@@ -93,6 +93,16 @@ class SurveyController extends AbstractController
             $answer->setSurvey($survey);
             $answer->setCreatedat(new \DateTime('now'));
             $answer->setAcceptedat(new \DateTime('now'));
+            $result = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+            $answer->setUserAgent($_SERVER['HTTP_USER_AGENT']);
+            $answer->setDeviceType($result->device->type);
+            $answer->setDeviceIdentifier($result->device->identifier);
+            $answer->setDeviceManufacturer($result->device->manufacturer);
+            $answer->setDeviceModel($result->device->model);
+            $answer->setOsName($result->os->name);
+            $answer->setOsVersion($result->os->version->toString());
+            $answer->setBrowserName($result->browser->name);
+            $answer->setBrowserVersion($result->browser->version->toString());
             if ($survey->getMultiple()>0) {
                 foreach($form["propositions"]->getData() as $proposition)
                     $answer->addProposition($proposition);
