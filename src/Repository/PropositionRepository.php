@@ -19,6 +19,17 @@ class PropositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Proposition::class);
     }
 
+    public function findTestbis($survey)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.answers', 'a')
+            ->andWhere('p.survey = :survey')
+            ->setParameter('survey', $survey)
+            ->groupBy('p.id')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Proposition[] Returns an array of Proposition objects
     //  */

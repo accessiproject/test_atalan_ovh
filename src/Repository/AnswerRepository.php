@@ -28,7 +28,6 @@ class AnswerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
     // /**
     //  * @return Answer[] Returns an array of Answer objects
     //  */

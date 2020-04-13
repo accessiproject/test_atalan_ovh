@@ -11,13 +11,17 @@ use App\Form\AnswerType;
 use App\Form\SurveyType;
 use App\Entity\Proposition;
 use App\Entity\TechnicalComponent;
+use App\Repository\AnswerRepository;
 use App\Repository\PropositionRepository;
+use App\Service\AjaxService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+//use App\Service\CountryService;
 
 
 /**
@@ -158,14 +162,19 @@ class SurveyController extends AbstractController
     */
    public function survey_ajax(Request $request)
    {
-       $param = $request->request->get('device');
-        $answers = $this->getDoctrine()->getRepository(Answer::class)->findSelectResult(1,$param);
-       $responseArray = array();
+        $survey = $request->query->get('survey');   
+        $device = $request->query->get('device');
+        
+        $propositions = $this->getDoctrine()->getRepository(Proposition::class)->findTestbis($survey);
+        $answers = $this->getDoctrine()->getRepository(Answer::class)->findSelectResult($survey,$device);
+        $responseArray = array();
        foreach($answers as $answer) {
            $responseArray[] = array(
-               "email" => $answer->getEmail(),
-           );
-       }
-       return new JsonResponse($responseArray);
+               "device_type" => $answer->getDeviceType(),
+        );
+        }
+        return new JsonResponse($responseArray);
+        
+        
    }
 }
