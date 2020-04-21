@@ -42,29 +42,6 @@ class AnswerType extends AbstractType
             $wording = $proposition->getWording();
             $choices[$wording] = $id;
         }
-        
-        $tab = array();
-        $tab1 = array();
-        foreach ($options['categories'] as $category) {
-            $idCat = $category->getId();
-            $type = $category->getType();
-            if (count($category->getAssistives())>1) {
-                foreach ($category->getAssistives() as $assistive) {    
-                    $id = $assistive->getId();
-                    $name = $assistive->getName();
-                    $tab[$type][$name]=$id;
-                    //echo $idCat . " " . $type . " : " . $name . "<br>";
-                }    
-            } else {
-                foreach ($category->getAssistives() as $assistive) {    
-                    $id = $assistive->getId();
-                    $name = $assistive->getName();
-                    $tab1[$type][$name]=$id;
-                    //echo $idCat . " " . $type . " : " . $name . "<br>";
-                }
-            }
-        }
-        
 
         $builder
             ->add('comment', TextareaType::class, [
@@ -78,15 +55,13 @@ class AnswerType extends AbstractType
             ->add('accept', CheckboxType::class, [
                 'label' => 'J\'accepte de partager mes données techniques à la Société Atalan.',
             ]);
-        if ($param == "false") {
-            
+        if ($param == "false") {    
             $builder
                 ->add('propositions', ChoiceType::class, array(
                     'choices' => $choices,
                     'expanded' => true,
                     'multiple' => false
                 ));
-
         } else {
             $builder
                 ->add('propositions', EntityType::class, [
@@ -100,34 +75,16 @@ class AnswerType extends AbstractType
                     },
                     'choice_label' => 'wording',
                 ]);
-        }    
+        }
         
-        /*
         $builder
-            ->add('assistives', EntityType::class, [
-                'class' => Assistive::class,
-                'expanded' => true,
+            ->add('assistives', EntityType::class,  [
                 'multiple' => true,
-                'group_by' => function (Category $category) {
-                    if (count($category->getAssistives())>1)
-                        return $category->getType();
-                },
-                'choice_label' => 'wording',
-            ]);
-            */
-                
-        /*
-        $builder
-            ->add('assistives', EntityType::class, [
+                'expanded' => true,
                 'class' => Assistive::class,
                 'choice_label' => 'name',
-                'group_by' => function(Assistive $assistive) {
-                    return $assistive->getCategory()->getType();
-                },
-                'multiple' => true,
-                'expanded' => true,
+                'group_by' => 'category.type',
             ]);
-            */
 
     }
 

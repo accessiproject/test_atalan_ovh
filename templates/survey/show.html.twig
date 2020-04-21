@@ -31,38 +31,30 @@
     <div class='form-group'>
         {{ form_row(form.comment) }}
     </div>
+    <div class='form-group'>
         {{ form_row(form.email) }}
-    <div class='form-group'>
-    </div>
-    <div class='form-group'>
     </div>
     <div class='form-group'>
         <h2>Aides techniques utilisées :</h2>
         <p>Quelle(s) aide(s) technique(s) avez-vous utilisé pendant ce test?</p>
         {% for category in categories %}
             <h3>{{ category.type }}</h3>
-                {% if category.assistives|length > 1 %}
-                    {% for assistive in category.assistives %}
-                            <input type="radio" id="{{ assistive.name }}_{{ assistive.id }}" name="category{{ category.id }}" value="{{ assistive.id }}">
-                            <label for="{{ assistive.name }}_{{ assistive.id }}">{{ assistive.name }}</label><br>
-                    {% endfor %}
-                {% else %}
-                    {% for assistive in category.assistives %}
-                            <input type="checkbox" id="{{ assistive.name }}_{{ assistive.id }}" name="category{{ category.id }}" value="{{ assistive.id }}">
-                            <label for="{{ assistive.name }}_{{ assistive.id }}">{{ assistive.name }}</label><br>
-                    {% endfor %}
-                {% endif %}
-
+            {% for assistive in category.assistives %}
+                {% set key = assistive.id %}
+                {{ form_widget(form.assistives[key]) }}
+                {{ assistive.name }}
+            {% endfor %}
         {% endfor %}
     </div>
-    <div class="form-group">
+    <div class='form-group'>
         {{ form_row(form.accept) }}
     </div>
     <div class='form-group'>
         <hr>
         <input class="btn btn-success" type="submit" name="btSubmit" value="Enregistrer ma réponse" />
     </div>
-    {{ form_end(form) }}
+        {{ form_end(form) }}
+    </div>
     <div class='form-group'>
         <hr>
         <a role="button" class="btn btn-info" href="">Modifier</a>

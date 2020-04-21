@@ -41,13 +41,58 @@
             </select>
         </div>
         <script src="{{ asset('_js/selectTableAjaxClass.js') }}"></script>
+        <script src="{{ asset('_js/oxhttp.js') }}"></script>
         <script>
 
+        /*
         function selectTableAjax() {
-           var parameter=["survey={{ survey.id }}"];
-           let selectTableAjax = new SelectTableAjaxClass("iddivselects",parameter,"idtest");
+           var parameter="survey={{ survey.id }}";
+           let selectTableAjax = new SelectTableAjaxClass("iddivselects",parameter);           
         }
         selectTableAjax();
+
         
-        </script>
+        function myFunction(e) {
+            let result=JSON.parse(e);
+            //console.log(result.length);
+            
+            
+            var id = document.getElementById("id");
+            for (let i=0;i<result.id.length;i++) {   
+                opt=document.createElement("option");
+                opt.innerHTML="answer " + result.id[i].id;
+                opt.value=result.id[i].id;
+                id.appendChild(opt);   
+            }
+            
+            
+            /*
+            var os_name = document.getElementById("os_name");
+            for (let i=0;i<result.os_name.length;i++) {   
+                opt=document.createElement("option");
+                opt.innerHTML=result.os_name[i].os_name;
+                opt.value=result.os_name[i].os_name;
+                os_name.appendChild(opt);   
+            }
+            
+            
+            var s = document.getElementById("os_name");
+            for (let i=0;i<result.length;i++) {   
+                opt=document.createElement("option");
+                opt.innerHTML=result[i].os_name;
+                opt.value=result[i].os_name;
+                s.appendChild(opt);   
+            }
+            var y = document.getElementById("browser_name");
+            for (let i=0;i<result.length;i++) {   
+                opt=document.createElement("option");
+                opt.innerHTML=result[i].browser_name;
+                opt.value=result[i].browser_name;
+                y.appendChild(opt);   
+            }
+            
+            
+        }
+        */
+       </script>
 {% endblock %}

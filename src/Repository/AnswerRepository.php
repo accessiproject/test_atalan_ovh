@@ -26,7 +26,7 @@ class AnswerRepository extends ServiceEntityRepository
             ->setParameter('survey', $survey)
             ->groupBy($param)
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
     }
     // /**
     //  * @return Answer[] Returns an array of Answer objects
