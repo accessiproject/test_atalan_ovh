@@ -18,6 +18,15 @@ class AssistiveRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Assistive::class);
     }
+    
+    public function findSelectAssistive($survey)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT a FROM App\Entity\Assistive a JOIN a.answers an WHERE an.survey=$survey GROUP BY a.id");
+        $assistives = $query->getArrayResult();
+        return $assistives;
+    }
+
     /*
     public function categorysupun()
     {

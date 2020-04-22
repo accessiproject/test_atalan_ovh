@@ -32,5 +32,5 @@ class AnswerController extends AbstractController
         return $this->redirectToRoute('answer_list', [
             'id' => $answer->getId(),
         ]);
-    }
+    }   
 }

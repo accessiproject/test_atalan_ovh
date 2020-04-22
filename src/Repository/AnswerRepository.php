@@ -28,6 +28,18 @@ class AnswerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function findSelectTest()
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.survey = 6')
+            ->leftJoin('a.assistives', 's')
+            ->groupBy('s.id')
+            ->getQuery()
+            ->getArrayResult();
+            
+    }
+
     // /**
     //  * @return Answer[] Returns an array of Answer objects
     //  */

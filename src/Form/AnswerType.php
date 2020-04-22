@@ -17,9 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AnswerType extends AbstractType
 {
@@ -43,23 +42,37 @@ class AnswerType extends AbstractType
             $choices[$wording] = $id;
         }
 
+        if ($options['action_type']=="show")
+            $disabled = "true";
+        else
+            $disabled = "false";
+        
         $builder
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire (facultatif) :',
                 'required' => false,
+                'disabled' => $disabled,
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Votre adresse email (facultatif) :',
                 'required' => false,
+                'disabled' => $disabled,
             ])
             ->add('accept', CheckboxType::class, [
                 'label' => 'J\'accepte de partager mes données techniques à la Société Atalan.',
+                'disabled' => $disabled,
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer ma réponse',
+                'disabled' => $disabled,
             ]);
+        
         if ($param == "false") {    
             $builder
                 ->add('propositions', ChoiceType::class, array(
                     'choices' => $choices,
                     'expanded' => true,
+                    'disabled' => $disabled,
                     'multiple' => false
                 ));
         } else {
@@ -68,6 +81,7 @@ class AnswerType extends AbstractType
                     'class' => Proposition::class,
                     'expanded' => true,
                     'multiple' => true,
+                    'disabled' => $disabled,
                     'query_builder' => function (EntityRepository $proposition) use ($survey) {
                         return $proposition->createQueryBuilder('u')
                             ->where('u.survey = :survey')
@@ -81,6 +95,7 @@ class AnswerType extends AbstractType
             ->add('assistives', EntityType::class,  [
                 'multiple' => true,
                 'expanded' => true,
+                'disabled' => $disabled,
                 'class' => Assistive::class,
                 'choice_label' => 'name',
                 'group_by' => 'category.type',
@@ -96,6 +111,7 @@ class AnswerType extends AbstractType
             'multiple' => null,
             'propositions' => null,
             'categories' => null,
+            'action_type' => null,
         ]);
     }
 

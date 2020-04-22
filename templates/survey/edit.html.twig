@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Création d'un sondage{% endblock %}
+{% block title %}
+    {{ id ? 'Modification du sondage' : 'Création d\'un nouveau sondage' }}
+{% endblock %}
 
 {% block body %}
     {{ form_start(form) }}
-        <h1>Ajouter un nouveau sondage</h1>
+        <h1>{{ id ? 'Modification du sondage' : 'Création d\'un nouveau sondage' }}</h1>
         <fieldset>
             <legend>
                 <h2>Informations générales sur le sondage :</h2>
@@ -65,7 +67,9 @@
             </ol>
             <div id="add_button"></div>
         </fieldset>
-        <button type="submit">Ajouter le sondage</button>
+        <button type="submit">
+            {{ id ? 'Modifier le sondage' : 'Créer le sondage' }}</h1>
+        </button>
     {{ form_end(form) }}
 <script src="{{ asset('_js/formCollectionTypeClass.js') }}"></script>
 <script>

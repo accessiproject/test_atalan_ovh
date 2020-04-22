@@ -26,73 +26,71 @@
         {% endfor %}
         </table>
         <h2>Synthèse</h2>
-        <div id="iddivselects"> 
+        <div id="iddivselects">             
+            <label for="proposition_id">proposition_id :</label>
+            <select aria-label="Filtrer par proposition" id="proposition_id"></select>
             <label for="answer_id">answer_id :</label>
-            <select aria-label="Filtrer par answer" id="id">
-            </select>
-            <label for="device_type">device_type :</label>
-            <select aria-label="Filtrer par device" id="device_type">
-            </select>
-            <label for="os_name">osöname :</label>
-            <select aria-label="Filtrer par os" id="os_name">
-            </select>
-            <label for="browser_name">browser_name :</label>
-            <select aria-label="Filtrer par browser" id="browser_name">
-            </select>
+            <select aria-label="Filtrer par answer" id="answer_id"></select>
+            <label for="answer_device_type">device_type :</label>
+            <select aria-label="Filtrer par device" id="answer_device_type"></select>
+            <label for="answer_os_name">osöname :</label>
+            <select aria-label="Filtrer par os" id="answer_os_name"></select>
+            <label for="answer_browser_name">browser_name :</label>
+            <select aria-label="Filtrer par browser" id="answer_browser_name"></select>
+            <label for="assistive_id">assistive_name :</label>
+            <select aria-label="Filtrer par assistive" id="assistive_id"></select>
         </div>
-        <script src="{{ asset('_js/selectTableAjaxClass.js') }}"></script>
-        <script src="{{ asset('_js/oxhttp.js') }}"></script>
         <script>
 
-        /*
-        function selectTableAjax() {
-           var parameter="survey={{ survey.id }}";
-           let selectTableAjax = new SelectTableAjaxClass("iddivselects",parameter);           
-        }
-        selectTableAjax();
+function getXmlhttp() {
+	if (window.XMLHttpRequest)
+		return new XMLHttpRequest();
+	else if (window.ActiveXObject)
+		return new ActiveXObject("Msxml2.XMLHTTP");
+	else
+		throw new Error("Could not create HTTP request object.");
+}
 
-        
-        function myFunction(e) {
-            let result=JSON.parse(e);
-            //console.log(result.length);
-            
-            
-            var id = document.getElementById("id");
-            for (let i=0;i<result.id.length;i++) {   
+//select param_ajax
+function select_ajax(value,label) {
+    var x = value.substring(value.indexOf("_")+1, value.length);  
+    var para ="survey={{ survey.id }}&" + value + "=" + x;
+    xmlhttp=getXmlhttp();
+    xmlhttp.open("GET","http://127.0.0.1:8000/ajax?"+para,true);
+    xmlhttp.onreadystatechange=mafonction;
+    xmlhttp.send();
+    function mafonction() {
+        if (this.readyState==4 && this.status==200) {
+            var result = JSON.parse(this.responseText);
+            console.log(result);
+            let parent = document.getElementById(value);        
+            if (result[value].length>1) {
                 opt=document.createElement("option");
-                opt.innerHTML="answer " + result.id[i].id;
-                opt.value=result.id[i].id;
-                id.appendChild(opt);   
+                opt.innerHTML="all " + value;
+                opt.value=value;
+                parent.appendChild(opt);                   
+            } else {
+                parent.disabled="true";
             }
-            
-            
-            /*
-            var os_name = document.getElementById("os_name");
-            for (let i=0;i<result.os_name.length;i++) {   
+            for (let i=0;i<result[value].length;i++) {
                 opt=document.createElement("option");
-                opt.innerHTML=result.os_name[i].os_name;
-                opt.value=result.os_name[i].os_name;
-                os_name.appendChild(opt);   
+                
+                if (label!=null)
+                    opt.innerHTML=label + result[value][i][x];
+                else
+                    opt.innerHTML=result[value][i][x];
+                
+                opt.value=result[value][i][x];
+                parent.appendChild(opt);   
             }
-            
-            
-            var s = document.getElementById("os_name");
-            for (let i=0;i<result.length;i++) {   
-                opt=document.createElement("option");
-                opt.innerHTML=result[i].os_name;
-                opt.value=result[i].os_name;
-                s.appendChild(opt);   
-            }
-            var y = document.getElementById("browser_name");
-            for (let i=0;i<result.length;i++) {   
-                opt=document.createElement("option");
-                opt.innerHTML=result[i].browser_name;
-                opt.value=result[i].browser_name;
-                y.appendChild(opt);   
-            }
-            
-            
         }
-        */
+    }
+}
+select_ajax("proposition_id",null);
+select_ajax("answer_id","answer n°");
+select_ajax("answer_device_type",null);
+select_ajax("answer_os_name",null);
+select_ajax("answer_browser_name",null);
+select_ajax("assistive_id",null);
        </script>
 {% endblock %}

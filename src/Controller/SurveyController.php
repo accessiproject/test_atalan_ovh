@@ -13,7 +13,7 @@ use App\Entity\Proposition;
 use App\Entity\TechnicalComponent;
 use App\Repository\AnswerRepository;
 use App\Repository\PropositionRepository;
-use App\Service\AjaxService;
+use App\Repository\AssistiveRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,6 +74,7 @@ class SurveyController extends AbstractController
         return $this->render('survey/edit.html.twig', [
             'controller_name' => 'SurveyController',
             'form' => $form->createView(),
+            'id' => $survey->getId() ? $survey->getId() : 0
         ]);
     }
 
@@ -89,6 +90,7 @@ class SurveyController extends AbstractController
             'survey' => $survey->getId(),
             'multiple' => $survey->getMultiple(),
             'propositions' => $survey->getPropositions(),
+            'action_type' => 'show'
         ));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -147,21 +149,13 @@ class SurveyController extends AbstractController
     public function survey_result($id, Request $request)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
-        $array_parameters = ["id"=>"id","device_type"=>"device_type","os_name"=>"os_name","browser_name"=>"browser_name"];
-        $responseArray=array();
-        foreach ($array_parameters as $key=>$parameter) {
-            $parameter_request = "a." . $parameter;
-            $parameter = $this->getDoctrine()->getRepository(Answer::class)->findSelectResult(6, $parameter_request);    
-            $responseArray[$key]=$parameter;
-        }
-        //var_dump($responseArray);
-        $resultat=json_encode($responseArray);
-        echo $resultat;
+        $props = $this->getDoctrine()->getRepository(Proposition::class)->findSelectProposition(6);
+        $ass = $this->getDoctrine()->getRepository(Assistive::class)->findSelectAssistive(6);
+        var_dump($ass);
         return $this->render('survey/result.html.twig', [
             'controller_name' => 'SurveyController',
             'survey' => $survey,
-            'resultat' => $resultat,
-            'responseArray' => $responseArray,
+            'propositions' => $props,
         ]);
     }
 
@@ -175,9 +169,17 @@ class SurveyController extends AbstractController
         unset($array_parameters["survey"]);
         $responseArray=array();
         foreach ($array_parameters as $key=>$parameter) {
-            $parameter_request = "a." . $parameter;
-            $parameter = $this->getDoctrine()->getRepository(Answer::class)->findSelectResult($parameter_survey, $parameter_request);    
-            $responseArray[$key]=$parameter;
+            if ($key=="proposition_id") {
+                $propostions = $this->getDoctrine()->getRepository(Proposition::class)->findSelectProposition($parameter_survey);
+                $responseArray[$key]=$propostions;
+            } elseif ($key=="assistive_id") {
+                $assistives = $this->getDoctrine()->getRepository(Assistive::class)->findSelectAssistive($parameter_survey);
+                $responseArray[$key]=$assistives;
+            } else {
+                $parameter_request = "a." . $parameter;
+                $parameter = $this->getDoctrine()->getRepository(Answer::class)->findSelectResult($parameter_survey, $parameter_request);    
+                $responseArray[$key]=$parameter;
+            }
         }
         $resultat=json_encode($responseArray);
         return new response($resultat);
