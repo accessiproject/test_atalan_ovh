@@ -149,13 +149,55 @@ class SurveyController extends AbstractController
     public function survey_result($id, Request $request)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
-        $props = $this->getDoctrine()->getRepository(Proposition::class)->findSelectProposition(6);
-        $ass = $this->getDoctrine()->getRepository(Assistive::class)->findSelectAssistive(6);
-        var_dump($ass);
+        $array_parameters=[
+            "survey"=>6,
+            "answer_id"=>"id",
+            "proposition_id"=>"id",
+            "answer_device_type"=>"desktop",
+            "answer_os_name"=>"Windows",
+            "answer_browser_name"=>"browser_name",
+            "assistive_id"=>"id"
+        ];
+        $request_survey = $array_parameters["survey"];
+        unset($array_parameters["survey"]);
+        unset($array_parameters["proposition_id"]);
+        unset($array_parameters["assistive_id"]);
+        foreach ($array_parameters as $key=>$parameter) {
+            if (preg_match("/$parameter/",$key)) {
+                $parameter = "a." . $parameter; 
+                $array_parameters[$key]=$parameter;
+            } else {
+                $parameter = "'" . $parameter . "'"; 
+                $array_parameters[$key]=$parameter;
+            }
+        }
+        //var_dump($array_parameters);
+        $results = $this->getDoctrine()->getRepository(Answer::class)->findSelectResults($request_survey,$array_parameters["answer_id"],$array_parameters["answer_device_type"],$array_parameters["answer_os_name"],$array_parameters['answer_browser_name']);
+        $responseArray=array();
+        for ($i=0;$i<count($results);$i++) {
+            $responseArray[$i]["id"]=$results[$i]->getId();
+            $responseArray[$i]["comment"]=$results[$i]->getComment();
+            $responseArray[$i]["email"]=$results[$i]->getEmail();
+            $responseArray[$i]["user_agent"]=$results[$i]->getUserAgent();
+            $responseArray[$i]["device_type"]=$results[$i]->getDeviceType();
+            $responseArray[$i]["device_identifier"]=$results[$i]->getDeviceIdentifier();
+            $responseArray[$i]["device_manufacturer"]=$results[$i]->getDeviceManufacturer();
+            $responseArray[$i]["device_model"]=$results[$i]->getDeviceModel();
+            $responseArray[$i]["os_name"]=$results[$i]->getOsName();
+            $responseArray[$i]["os_version"]=$results[$i]->getOsVersion();
+            $responseArray[$i]["browser_name"]=$results[$i]->getBrowserName();
+            $responseArray[$i]["browser_version"]=$results[$i]->getBrowserVersion();
+            foreach ($results[$i]->getPropositions() as $proposition)
+                $responseArray[$i]["proposition_wording"][]=$proposition->getWording();
+            foreach ($results[$i]->getAssistives() as $assistive)
+                $responseArray[$i]["assistive_name"][]=$assistive->getName();
+        }
+        $json=array();
+        $json=json_encode($responseArray);
+        //echo $json;
         return $this->render('survey/result.html.twig', [
             'controller_name' => 'SurveyController',
             'survey' => $survey,
-            'propositions' => $props,
         ]);
     }
 
@@ -187,5 +229,50 @@ class SurveyController extends AbstractController
         //return new JsonResponse($responseArray);
         //$jsonResult = json_encode($responseArray);
         //return $jsonResult;
+    }
+
+    /**
+     * @Route("/ajaxtable", name="survey_ajaxtable")
+     */
+    public function survey_ajaxtable(Request $request)
+    {
+        $array_parameters = $request->query->all();
+        $request_survey = $array_parameters["survey"];
+        unset($array_parameters["survey"]);
+        unset($array_parameters["proposition_id"]);
+        unset($array_parameters["assistive_id"]);
+        foreach ($array_parameters as $key=>$parameter) {
+            if (preg_match("/$parameter/",$key)) {
+                $parameter = "a." . $parameter; 
+                $array_parameters[$key]=$parameter;
+            } else {
+                $parameter = "'" . $parameter . "'"; 
+                $array_parameters[$key]=$parameter;
+            }
+        }
+        //var_dump($array_parameters);
+        $results = $this->getDoctrine()->getRepository(Answer::class)->findSelectResults($request_survey,$array_parameters["answer_id"],$array_parameters["answer_device_type"],$array_parameters["answer_os_name"],$array_parameters['answer_browser_name']);
+        $responseArray=array();
+        for ($i=0;$i<count($results);$i++) {
+            $responseArray[$i]["id"]=$results[$i]->getId();
+            $responseArray[$i]["comment"]=$results[$i]->getComment();
+            $responseArray[$i]["email"]=$results[$i]->getEmail();
+            $responseArray[$i]["user_agent"]=$results[$i]->getUserAgent();
+            $responseArray[$i]["device_type"]=$results[$i]->getDeviceType();
+            $responseArray[$i]["device_identifier"]=$results[$i]->getDeviceIdentifier();
+            $responseArray[$i]["device_manufacturer"]=$results[$i]->getDeviceManufacturer();
+            $responseArray[$i]["device_model"]=$results[$i]->getDeviceModel();
+            $responseArray[$i]["os_name"]=$results[$i]->getOsName();
+            $responseArray[$i]["os_version"]=$results[$i]->getOsVersion();
+            $responseArray[$i]["browser_name"]=$results[$i]->getBrowserName();
+            $responseArray[$i]["browser_version"]=$results[$i]->getBrowserVersion();
+            foreach ($results[$i]->getPropositions() as $proposition)
+                $responseArray[$i]["proposition_wording"][]=$proposition->getWording();
+            foreach ($results[$i]->getAssistives() as $assistive)
+                $responseArray[$i]["assistive_name"][]=$assistive->getName();
+        }
+        //$json=array();
+        $json=json_encode($responseArray);
+        return new response($json);
     }
 }

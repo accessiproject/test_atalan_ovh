@@ -29,17 +29,17 @@ class AnswerRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function findSelectTest()
-    {
-        return $this->createQueryBuilder('a')
-            ->where('a.survey = 6')
-            ->leftJoin('a.assistives', 's')
-            ->groupBy('s.id')
-            ->getQuery()
-            ->getArrayResult();
-            
-    }
+    
 
+    
+    public function findSelectResults($survey,$id,$device_type,$os_name,$browser_name)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT a FROM App\Entity\Answer a WHERE a.survey=$survey AND a.id=$id AND a.device_type=$device_type and a.os_name=$os_name and a.browser_name=$browser_name");
+        $results = $query->getResult();
+        return $results;
+    }
+    
     // /**
     //  * @return Answer[] Returns an array of Answer objects
     //  */

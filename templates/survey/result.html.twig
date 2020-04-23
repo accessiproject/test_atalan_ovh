@@ -26,20 +26,34 @@
         {% endfor %}
         </table>
         <h2>Synthèse</h2>
-        <div id="iddivselects">             
-            <label for="proposition_id">proposition_id :</label>
-            <select aria-label="Filtrer par proposition" id="proposition_id"></select>
-            <label for="answer_id">answer_id :</label>
-            <select aria-label="Filtrer par answer" id="answer_id"></select>
-            <label for="answer_device_type">device_type :</label>
-            <select aria-label="Filtrer par device" id="answer_device_type"></select>
-            <label for="answer_os_name">osöname :</label>
-            <select aria-label="Filtrer par os" id="answer_os_name"></select>
-            <label for="answer_browser_name">browser_name :</label>
-            <select aria-label="Filtrer par browser" id="answer_browser_name"></select>
-            <label for="assistive_id">assistive_name :</label>
-            <select aria-label="Filtrer par assistive" id="assistive_id"></select>
-        </div>
+        <table>
+            <thead>
+                <tr id="iddivselects">             
+                    <th>
+                        <select onchange="creationParameter()" aria-label="Filtrer par answer" id="answer_id"></select>
+                    </th>
+                    <th>Comment</th>
+                    <th>Email</th>
+                    <th>
+                        <select aria-label="Filtrer par proposition" id="proposition_id"></select>
+                    </th>
+                    <th>
+                        <select onchange="creationParameter()" aria-label="Filtrer par device" id="answer_device_type"></select>
+                    </th>
+                    <th>
+                        <select onchange="creationParameter" aria-label="Filtrer par os" id="answer_os_name"></select>
+                    </th>
+                    <th>
+                        <select onchange="creationParameter()" aria-label="Filtrer par browser" id="answer_browser_name"></select>
+                    </th>
+                    <th>
+                        <select aria-label="Filtrer par assistive" id="assistive_id"></select>
+                    </th>
+                    <th>User_agent</th>
+                </tr>
+            </thead>
+            <tbody id="idBodyResult"></tbody>
+        </table>
         <script>
 
 function getXmlhttp() {
@@ -52,7 +66,7 @@ function getXmlhttp() {
 }
 
 //select param_ajax
-function select_ajax(value,label) {
+function select_ajax(value,label,optionvalue,optionlabel) {
     var x = value.substring(value.indexOf("_")+1, value.length);  
     var para ="survey={{ survey.id }}&" + value + "=" + x;
     xmlhttp=getXmlhttp();
@@ -62,12 +76,11 @@ function select_ajax(value,label) {
     function mafonction() {
         if (this.readyState==4 && this.status==200) {
             var result = JSON.parse(this.responseText);
-            console.log(result);
             let parent = document.getElementById(value);        
             if (result[value].length>1) {
                 opt=document.createElement("option");
                 opt.innerHTML="all " + value;
-                opt.value=value;
+                opt.value=optionvalue;
                 parent.appendChild(opt);                   
             } else {
                 parent.disabled="true";
@@ -76,21 +89,89 @@ function select_ajax(value,label) {
                 opt=document.createElement("option");
                 
                 if (label!=null)
-                    opt.innerHTML=label + result[value][i][x];
+                    opt.innerHTML=label + result[value][i][optionlabel];
                 else
-                    opt.innerHTML=result[value][i][x];
+                    opt.innerHTML=result[value][i][optionlabel];
                 
-                opt.value=result[value][i][x];
-                parent.appendChild(opt);   
+                opt.value=result[value][i][optionvalue];
+                parent.appendChild(opt);
+                //creationParameter();   
+            }
+        }
+        //creationParameter();   
+    }
+}
+select_ajax("proposition_id",null,"id","wording");
+select_ajax("answer_id","answer n°","id","id");
+select_ajax("answer_device_type",null,"device_type","device_type");
+select_ajax("answer_os_name",null,"os_name","os_name");
+select_ajax("answer_browser_name",null,"browser_name","browser_name");
+select_ajax("assistive_id",null,"id","name");
+
+function creationParameter() {
+    let selects=iddivselects.querySelectorAll("select");
+    var tab=[];
+    for (let i=0;i<selects.length;i++)
+        tab.push(selects[i].id + "=" + selects[i].value);
+
+    var argument = tab.join("&");
+    var para ="survey={{ survey.id }}&" + argument;
+    xmlhttp=getXmlhttp();
+    xmlhttp.open("GET","http://127.0.0.1:8000/ajaxtable?"+para,true);
+    xmlhttp.onreadystatechange=mafonction;
+    xmlhttp.send();
+    function mafonction() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            let parent = document.getElementById("idBodyResult");
+            parent.innerHTML="";        
+            for (let i=0;i<result.length;i++) {
+                let tr=document.createElement("tr");
+                let td_answer_id=document.createElement("td");
+                td_answer_id.innerHTML="answer n°" + result[i]["id"];
+                tr.appendChild(td_answer_id);
+                let td_answer_comment=document.createElement("td");
+                td_answer_comment.innerHTML=result[i]["comment"];
+                tr.appendChild(td_answer_comment);
+                let td_answer_email=document.createElement("td");
+                td_answer_email.innerHTML=result[i]["email"];
+                tr.appendChild(td_answer_email);
+
+                let td_proposition_wording=document.createElement("td");
+                for (let j=0;j<result[i]["proposition_wording"].length;j++) {
+                    td_proposition_wording.innerHTML="<li>" + result[i]["proposition_wording"][j] + "</li>";
+                }
+                tr.appendChild(td_proposition_wording);
+
+                let td_answer_device_type=document.createElement("td");
+                td_answer_device_type.innerHTML=result[i]["device_type"];
+                tr.appendChild(td_answer_device_type);
+
+                let td_answer_os=document.createElement("td");
+                td_answer_os.innerHTML=result[i]["os_name"] + " " + result[i]["os_version"];
+                tr.appendChild(td_answer_os);
+
+                let td_answer_browser=document.createElement("td");
+                td_answer_browser.innerHTML=result[i]["browser_name"] + " " + result[i]["browser_version"];
+                tr.appendChild(td_answer_browser);
+
+                let td_assistive_name=document.createElement("td");
+                console.log(result[i]["assistive_name"].length);
+                for (let j=0;j<result[i]["assistive_name"].length;j++) {
+                    td_assistive_name.innerHTML="<li>" + result[i]["assistive_name"][j] + "</li>";
+                }
+                tr.appendChild(td_assistive_name);
+
+                let td_answer_user_agent=document.createElement("td");
+                td_answer_user_agent.innerHTML=result[i]["user_agent"];
+                tr.appendChild(td_answer_user_agent);
+                
+                parent.appendChild(tr);
             }
         }
     }
 }
-select_ajax("proposition_id",null);
-select_ajax("answer_id","answer n°");
-select_ajax("answer_device_type",null);
-select_ajax("answer_os_name",null);
-select_ajax("answer_browser_name",null);
-select_ajax("assistive_id",null);
+
+
        </script>
 {% endblock %}
