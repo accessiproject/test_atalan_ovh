@@ -244,6 +244,10 @@ class SurveyController extends AbstractController
         if ($request_proposition_id=="id")
             $request_proposition_id = "p.id";
 
+        $request_assistive_id = $array_parameters["assistive_id"];
+        if ($request_assistive_id=="id")
+            $request_assistive_id = "s.id";
+            
         unset($array_parameters["survey"]);
         unset($array_parameters["proposition_id"]);
         unset($array_parameters["assistive_id"]);
@@ -256,7 +260,7 @@ class SurveyController extends AbstractController
                 $array_parameters[$key]=$parameter;
             }
         }
-        $results = $this->getDoctrine()->getRepository(Answer::class)->findSelectResults($request_survey,$array_parameters["answer_id"],$array_parameters["answer_device_type"],$array_parameters["answer_os_name"],$array_parameters['answer_browser_name'],$request_proposition_id);
+        $results = $this->getDoctrine()->getRepository(Answer::class)->findSelectResults($request_survey,$array_parameters["answer_id"],$array_parameters["answer_device_type"],$array_parameters["answer_os_name"],$array_parameters['answer_browser_name'],$request_proposition_id,$request_assistive_id);
         $responseArray=array();
         for ($i=0;$i<count($results);$i++) {
             $responseArray[$i]["id"]=$results[$i]->getId();
