@@ -1,0 +1,15 @@
+{% extends 'base_answer_for_test.html.twig' %}
+
+{% block title %}
+    Remerciement 
+{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            <h1>{{ message }}</h1>
+        </div>
+    {% endfor %}
+    <p>La Société Atalan vous remercie pour votre aide</p>
+    <p>À très bientôt pour de nouveaux tests.</p>
+{% endblock %}

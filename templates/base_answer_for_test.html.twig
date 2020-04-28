@@ -24,16 +24,7 @@
         {% endblock %}
     </head>
     <body>
-        <header role="banner">
-            {% include 'partials/menu.html.twig' %}
-        </header>
-        <main role="main">
-            {% block body %}{% endblock %}
-        </main>
-        <footer role="contentinfo" class="mt-5 bg-light py-5 text-center">
-            {% include 'partials/footer.html.twig' %}
-        </footer>
-        {% block javascripts %}
-        {% endblock %}
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

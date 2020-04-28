@@ -28,14 +28,11 @@ class AnswerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
-
     
-
-    
-    public function findSelectResults($survey,$id,$device_type,$os_name,$browser_name)
+    public function findSelectResults($survey,$id,$device_type,$os_name,$browser_name,$p_id)
     {
         $em = $this->getEntityManager();
-        $query = $em->createQuery("SELECT a FROM App\Entity\Answer a WHERE a.survey=$survey AND a.id=$id AND a.device_type=$device_type and a.os_name=$os_name and a.browser_name=$browser_name");
+        $query = $em->createQuery("SELECT a FROM App\Entity\Answer a JOIN a.propositions p WHERE p.id=$p_id AND a.survey=$survey AND a.id=$id AND a.device_type=$device_type and a.os_name=$os_name and a.browser_name=$browser_name");
         $results = $query->getResult();
         return $results;
     }

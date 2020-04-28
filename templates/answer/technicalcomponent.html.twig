@@ -1,0 +1,13 @@
+{% extends 'base_answer_for_test.html.twig' %}
+
+{% block title %}
+    Composant n°{{ technicalComponent.id }} : {{ technicalComponent.title }}
+{% endblock %}
+
+{% block body %}
+    <p><a href="{{ path('answer_answer', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    <hr>
+    <iframe title="{{ technicalComponent.title }}" src="{{ technicalComponent.url }}"></iframe>
+    <hr>
+    <p><a href="{{ path('answer_answer', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+{% endblock %}

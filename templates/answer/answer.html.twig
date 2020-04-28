@@ -1,0 +1,28 @@
+{% extends 'base_answer_for_test.html.twig' %}
+
+{% block title %}
+    {% if not app.user %}
+        {% if survey.status=="Ouvert" %}
+            {{ survey.title }}
+        {% else %}
+            Erreur. Page introuvable.
+        {% endif %}
+    {% else %}
+        {{ survey.title }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if not app.user %}
+        {% if survey.status=="Ouvert" %}
+            {% include 'partials/form_answer.html.twig' %}
+        {% else %}
+            <p>Erreur. Page introuvable.</p>
+        {% endif %}
+    {% else %}
+        <p>Statut du sondage : <span id="idstatus">{{ survey.status }}</span>.</p>
+        <button onclick="changeStatus()">Modifier le statut du sondage</button>
+        <hr>
+        {% include 'partials/form_answer.html.twig' %}
+    {% endif %}
+{% endblock %}

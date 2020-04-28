@@ -90,7 +90,6 @@ class SurveyController extends AbstractController
             'survey' => $survey->getId(),
             'multiple' => $survey->getMultiple(),
             'propositions' => $survey->getPropositions(),
-            'action_type' => 'show'
         ));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -149,6 +148,7 @@ class SurveyController extends AbstractController
     public function survey_result($id, Request $request)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
+        /*
         $array_parameters=[
             "survey"=>6,
             "answer_id"=>"id",
@@ -194,6 +194,7 @@ class SurveyController extends AbstractController
         }
         $json=array();
         $json=json_encode($responseArray);
+        */
         //echo $json;
         return $this->render('survey/result.html.twig', [
             'controller_name' => 'SurveyController',
@@ -237,7 +238,12 @@ class SurveyController extends AbstractController
     public function survey_ajaxtable(Request $request)
     {
         $array_parameters = $request->query->all();
+        
         $request_survey = $array_parameters["survey"];
+        $request_proposition_id = $array_parameters["proposition_id"];
+        if ($request_proposition_id=="id")
+            $request_proposition_id = "p.id";
+
         unset($array_parameters["survey"]);
         unset($array_parameters["proposition_id"]);
         unset($array_parameters["assistive_id"]);
@@ -250,8 +256,7 @@ class SurveyController extends AbstractController
                 $array_parameters[$key]=$parameter;
             }
         }
-        //var_dump($array_parameters);
-        $results = $this->getDoctrine()->getRepository(Answer::class)->findSelectResults($request_survey,$array_parameters["answer_id"],$array_parameters["answer_device_type"],$array_parameters["answer_os_name"],$array_parameters['answer_browser_name']);
+        $results = $this->getDoctrine()->getRepository(Answer::class)->findSelectResults($request_survey,$array_parameters["answer_id"],$array_parameters["answer_device_type"],$array_parameters["answer_os_name"],$array_parameters['answer_browser_name'],$request_proposition_id);
         $responseArray=array();
         for ($i=0;$i<count($results);$i++) {
             $responseArray[$i]["id"]=$results[$i]->getId();

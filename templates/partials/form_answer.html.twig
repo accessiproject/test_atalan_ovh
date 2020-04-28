@@ -1,0 +1,63 @@
+{{ form_start(form) }}
+    <fieldset>
+        <legend>
+            <h1>{{ survey.title }}</h1>
+        </legend>
+        <p tabindex="0">Consigne donnée : {{ survey.question }}</p>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <h2>Liste des composants techniques à tester :</h2>
+        </legend>
+        {% for technicalComponent in survey.technicalComponents %}
+            <fieldset>
+                <legend>
+                    <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+                </legend>
+                {% if technicalComponent.choice > 0 %}
+                    <p>
+                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'id': technicalComponent.id }) }}">{{ technicalComponent.url }}</a>
+                    </p>
+                {% else %}
+                    {{ technicalComponent.code }}
+                {% endif %}
+            </fieldset>
+        {% endfor %}
+    </fieldset>
+    <fieldset>
+        <legend>
+            <h2>Réponses proposées :</h2>
+            <p>{{ survey.multiple ? '(plusieurs réponses possibles).' : '(une seule réponse possible).' }}</p>
+        </legend>
+        {{ form_widget(form.propositions) }}
+    </fieldset>
+    <fieldset>
+        <legend>
+            <h2>Informations complémentaires :</h2>
+        </legend>
+        {{ form_row(form.comment) }}
+        {{ form_row(form.email) }}
+    </fieldset>
+    <fieldset>
+        <legend>
+            <h2>Aides techniques utilisées :</h2>
+            <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
+        </legend>
+        {% for category in categories %}
+            <fieldset>
+                <legend>
+                    <h3>{{ category.type }}</h3>
+                </legend>    
+                {% for assistive in category.assistives %}
+                    {% set key = assistive.id %}
+                    {{ form_row(form.assistives[key]) }}
+                {% endfor %}            
+            </fieldset>
+        {% endfor %}
+    </fieldset>
+    <hr>
+    <fieldset>
+        {{ form_row(form.accept) }}
+        {{ form_row(form.save) }}
+    </fieldset>
+{{ form_end(form) }}
