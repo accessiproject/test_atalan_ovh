@@ -184,7 +184,8 @@ function reinitialisation() {
     select_ajax("answer_os_name",null,"os_name","os_name");
     select_ajax("answer_browser_name",null,"browser_name","browser_name");
     select_ajax("assistive_id",null,"id","name");
-    let para="answer_id=id&proposition_id=id&answer_device_type=desktop&answer_os_name=Windows&answer_browser_name=browser_name&assistive_id=id";
+    let para="answer_id=id&proposition_id=id&answer_device_type=device_type&answer_os_name=os_name&answer_browser_name=browser_name&assistive_id=id";
+    //document.getElementById("an").selected = true;
     creationTable(para);
 }
 reinitialisation();
