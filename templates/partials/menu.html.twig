@@ -1,6 +1,6 @@
-<nav role="navigation" aria-label="Menu principal" class="navbar navbar-expand-lg navbar-light bg-light">
-    <ul class="navbar-nav mr-auto">
-        {% if app.user %}
+{% if app.user %}
+    <nav role="navigation" aria-label="Menu principal" class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a href="{{ path('survey_list') }}" class="nav-link">Sondages</a>
             </li>
@@ -15,7 +15,6 @@
                     <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
                 </li>
             </ul>
-        {% endif %}
-    </ul>
-    </div>
-</nav>
+        </ul>
+    </nav>
+{% endif %}
