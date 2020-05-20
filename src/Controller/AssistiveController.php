@@ -54,6 +54,7 @@ class AssistiveController extends AbstractController
         return $this->render('assistive/edit.html.twig', [
             'controller_name' => 'AssistiveController',
             'form' => $form->createView(),
+            'id' => $category->getId() ? $category->getId() : 0
         ]);
     }
 

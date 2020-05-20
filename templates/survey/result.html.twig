@@ -1,32 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Résultats du sondage {{ survey.title }}
+    Résultats du sondage – {{ survey.title }}
 {% endblock %}
 
 {% block body %}
-    <h1>Résultats du sondage {{ survey.title }}</h1>
-    <div id="idtest"></div>
-    <div class='form-group'>
-        <p>Rappel : {{ survey.question }}</p>
-    </div>
+    <h1>Résultats du sondage – {{ survey.title }}</h1>
+    <p>Rappel : {{ survey.question }}</p>
+    <h2>Tableau 1. Synthèse des résultats</h2>
     <table class="table table-striped table-bordered table-hover">
-        <caption>
-            <h2>1 - Synthèse des résultats</h2>
-        </caption>
-        <tr>
-            <th>Proposition</th>
-            <th>Résultat</th>
-        </tr>
+        <thead>
+            <th scope="col">Proposition</th>
+            <th scope="col">Résultat</th>
+        </thead>
         {% for proposition in survey.propositions %}
             <tr>
-                <td>{{ proposition.wording }}</td>
+                <th scope="row">{{ proposition.wording }}</th>
                 <td>{{ proposition.answers|length }}</td>
             </tr>
         {% endfor %}
         </table>
-        <h2>Synthèse</h2>
-        <button onclick="reinitialisation()">Réinitialiser les filtres</button>
+        <hr>
+        <h2>Tableau 2. Résultats détaillés</h2>
+        <button onclick="init()">Réinitialiser les filtres</button>
         <table>
             <thead>
                 <tr id="iddivselects">             
@@ -42,7 +38,7 @@
                         <select onchange="creationParameter()" aria-label="Filtrer par device" id="answer_device_type"></select>
                     </th>
                     <th>
-                        <select onchange="creationParameter" aria-label="Filtrer par os" id="answer_os_name"></select>
+                        <select onchange="creationParameter()" aria-label="Filtrer par os" id="answer_os_name"></select>
                     </th>
                     <th>
                         <select onchange="creationParameter()" aria-label="Filtrer par browser" id="answer_browser_name"></select>
@@ -56,6 +52,13 @@
             <tbody id="idBodyResult"></tbody>
         </table>
         <script>
+
+var url = "http://sondage.atalan.fr/survey_atalan/public/index.php/";
+//"http://127.0.0.1:8000/";
+
+//var urlcourante = document.location.href;
+//console.log("url : " + urlcourante);
+//http://sondage.atalan.fr/survey_atalan/public/index.php/
 
 function getXmlhttp() {
 	if (window.XMLHttpRequest)
@@ -71,7 +74,7 @@ function select_ajax(value,label,optionvalue,optionlabel) {
     var x = value.substring(value.indexOf("_")+1, value.length);  
     var para ="survey={{ survey.id }}&" + value + "=" + x;
     xmlhttp=getXmlhttp();
-    xmlhttp.open("GET","http://127.0.0.1:8000/ajax?"+para,true);
+    xmlhttp.open("GET",url+"ajax?"+para,true);
     xmlhttp.onreadystatechange=mafonction;
     xmlhttp.send();
     function mafonction() {
@@ -96,18 +99,10 @@ function select_ajax(value,label,optionvalue,optionlabel) {
                 
                 opt.value=result[value][i][optionvalue];
                 parent.appendChild(opt);
-                //creationParameter();   
             }
         }
-        //creationParameter();   
     }
 }
-//select_ajax("proposition_id",null,"id","wording");
-//select_ajax("answer_id","answer n°","id","id");
-//select_ajax("answer_device_type",null,"device_type","device_type");
-//select_ajax("answer_os_name",null,"os_name","os_name");
-//select_ajax("answer_browser_name",null,"browser_name","browser_name");
-//select_ajax("assistive_id",null,"id","name");
 
 function creationParameter() {
     let selects=iddivselects.querySelectorAll("select");
@@ -120,15 +115,15 @@ function creationParameter() {
 
 function creationTable(parameter) {
     var para ="survey={{ survey.id }}&" + parameter;
-    //console.log(para);
+    console.log(para);
     xmlhttp=getXmlhttp();
-    xmlhttp.open("GET","http://127.0.0.1:8000/ajaxtable?"+para,true);
+    xmlhttp.open("GET",url+"ajaxtable?"+para,true);
     xmlhttp.onreadystatechange=mafonction;
     xmlhttp.send();
     function mafonction() {
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {
             var result = JSON.parse(xmlhttp.responseText);
-            console.log(result);
+            //console.log(result);
             let parent = document.getElementById("idBodyResult");
             parent.innerHTML="";        
             for (let i=0;i<result.length;i++) {
@@ -185,10 +180,12 @@ function reinitialisation() {
     select_ajax("answer_browser_name",null,"browser_name","browser_name");
     select_ajax("assistive_id",null,"id","name");
     let para="answer_id=id&proposition_id=id&answer_device_type=device_type&answer_os_name=os_name&answer_browser_name=browser_name&assistive_id=id";
-    //document.getElementById("an").selected = true;
     creationTable(para);
 }
 reinitialisation();
 
+function init() {
+    window.location.reload();
+}
        </script>
 {% endblock %}

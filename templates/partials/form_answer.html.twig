@@ -15,11 +15,11 @@
                     <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
                 </legend>
                 {% if technicalComponent.choice > 0 %}
+                    {{ technicalComponent.code }}
+                {% else %}
                     <p>
                         <a target="_blank" href="{{ path('answer_technicalcomponent', {'id': technicalComponent.id }) }}">{{ technicalComponent.url }}</a>
                     </p>
-                {% else %}
-                    {{ technicalComponent.code }}
                 {% endif %}
             </fieldset>
         {% endfor %}
@@ -29,7 +29,12 @@
             <h2>Réponses proposées :</h2>
             <p>{{ survey.multiple ? '(plusieurs réponses possibles).' : '(une seule réponse possible).' }}</p>
         </legend>
-        {{ form_widget(form.propositions) }}
+        <ol id="idOlAnswer">
+            {% for proposition in form.propositions %}
+                {{ form_widget(proposition) }}
+                {{ form_label(proposition) }}</br> 
+            {% endfor %}
+        </ol>
     </fieldset>
     <fieldset>
         <legend>
@@ -43,7 +48,7 @@
             <h2>Aides techniques utilisées :</h2>
             <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
         </legend>
-        {% for category in categories %}
+        {% for category in categories|sortByField('type') %}
             <fieldset>
                 <legend>
                     <h3>{{ category.type }}</h3>

@@ -23,7 +23,7 @@ class TechnicalComponent
     private $survey;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255) 
      */
     private $title;
 

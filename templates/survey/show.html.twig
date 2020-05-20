@@ -12,4 +12,17 @@
         <a role="button" class="btn btn-danger" href="">Supprimer</a>
         <a role="button" class="btn btn-info" href="{{ path('survey_list') }}">Retour aux autres sondages</a>
     </div>
+
+    <script>
+
+    function addNumberList() {
+        let idOlAnswer = document.getElementById("idOlAnswer");
+        let tablabels = idOlAnswer.getElementsByTagName("label");
+        for (let i=0;i<tablabels.length;i++) {
+            tablabels[i].innerHTML=i+1 + ". " + tablabels[i].textContent;
+        }
+    }
+    addNumberList();
+
+    </script>
 {% endblock %}

@@ -13,7 +13,12 @@ class AssistiveType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name');
+            ->add('name', TextType::class, [
+                'label' => 'Nom de la technologie d\'assistance',
+                'attr' => [
+                    'placeholder' => 'Entrez le nom de la technologie d\'assistance',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

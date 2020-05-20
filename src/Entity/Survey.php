@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SurveyRepository")
@@ -20,11 +21,13 @@ class Survey
 
     /**
      * @ORM\Column(type="string", length=300)
+     * @Assert\NotBlank(message="Erreur. Ce champ est obligatoire.") 
      */
     protected $title;
 
     /**
      * @ORM\Column(type="string", length=500)
+     * @Assert\NotBlank(message="Erreur. Ce champ est obligatoire.") 
      */
     protected $question;
 
@@ -40,6 +43,7 @@ class Survey
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="Erreur. Ce champ est obligatoire.") 
      */
     protected $closing_message;
 

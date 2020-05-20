@@ -21,7 +21,7 @@ class User implements UserInterface
 
     /**
     * @ORM\Column(type="string", length=255)
-    * @Assert\NotBlank(message="Attention! Le champ «prénom» est obligatoire.")
+    * @Assert\NotBlank(message="Le champ «prénom» est obligatoire.")
      */
     private $firstname;
 

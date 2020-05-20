@@ -28,6 +28,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class SurveyController extends AbstractController
 {
+
     /**
      * @Route("/", name="survey_default")
      * @Route("/sondages", name="survey_list")

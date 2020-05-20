@@ -21,7 +21,7 @@ class TechnicalComponentType extends AbstractType
                 'required' => true,
             ])
             ->add('choice', ChoiceType::class, [
-                'label' => 'L\'implémentation',
+                'label' => 'L\'implémentation :',
                 'expanded' => true,
                 'data' => true,
                 'choices'  => [

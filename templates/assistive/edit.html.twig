@@ -1,17 +1,18 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'custom_style_bootstrap.html.twig' %}
 
-{% block title %}Technologies d'assistance{% endblock %}
+{% block title %}
+    {{ id ? 'Modification du type de technologie d\'assistance' : 'Création d\'un nouveau type de technologie d\'assistance' }}
+{% endblock %}
 
 {% block body %}
-        {{ form_start(form) }}
-            <fieldset>
-                <legend>
-                    <h1>Ajouter un nouveau type de technologie d'assistance</h1>
-                </legend>
-                <div class="form-group">
-                    {{ form_row(form.type) }}
-                </div>
-                <ol id="idOlAssistive" class="assistives" data-prototype="{{ form_widget(form.assistives.vars.prototype)|e('html_attr') }}">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'form'}}) }}
+        <legend>
+            <h1>{{ id ? 'Modification du type de technologie d\'assistance' : 'Création d\'un nouveau type de technologie d\'assistance' }}</h1>
+        </legend>
+        <fieldset>
+            {{ form_row(form.type) }}
+            <ol id="idOlAssistive" class="assistives" data-prototype="{{ form_widget(form.assistives.vars.prototype)|e('html_attr') }}">
                 {% for assistive in form.assistives %}
                     <li>
                         {{ form_row(assistive.name) }}
@@ -19,14 +20,16 @@
                 {% endfor %}
             </ol>
             <div id="add_button"></div>
-            </fieldset>
-            <button type="submit">Enregistrer</button>
-        {{ form_end(form) }}
+        </fieldset>
+        <button class="btn btn-primary" type="submit">
+            {{ id ? 'Modifier le type de technologie d\'assistance' : 'Créer un nouveau type de technologie d\'assistance' }}
+        </button>
+    {{ form_end(form) }}
 <script src="{{ asset('_js/formCollectionTypeClass.js') }}"></script>
 <script>
 
 function assistive() {
-	let assistive = new FormCollectionTypeClass("idOlAssistive","add_button","Supprimer cet élément","Ajouter une technologie d'assistance","<h4>","Composant","</h4>");
+	let assistive = new FormCollectionTypeClass("idOlAssistive","add_button","Retirer cet élément","Ajouter une technologie d'assistance","<h4>","Composant","</h4>");
 }
 assistive();
 

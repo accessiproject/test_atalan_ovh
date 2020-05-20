@@ -1,23 +1,32 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'custom_style_bootstrap.html.twig' %}
 
 {% block title %}{{ id ? 'Modification de l\'utilisateur' : 'Création d\'un nouvel utilisateur' }}{% endblock %}
 
 {% block body %}
-    <div>
-        {{ form_start(form) }}
-            <legend>
-                <h1>{{ id ? 'Modification de l\'utilisateur' : 'Création d\'un nouvel utilisateur' }}</h1>
-            </legend>
-            <fieldset>
-                {{ form_row(form.firstname) }}
-                {{ form_row(form.lastname) }}
-            </fieldset>
-            <fieldset>
-                {{ form_row(form.email) }}
-                {{ form_row(form.password) }}
-            </fieldset>
-            <button type="submit">
-                {{ id ? 'Modifier l\'utilisateur' : 'Créer le nouvel utilisateur' }}</h1>
-            </button>
-        {{ form_end(form) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        <legend>
+            <h1>Création d'un novel utilisateur</h1>
+        </legend>
+        <fieldset>
+            <span role="alert" id="idMsgError"></span>
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.lastname) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.password) }}
+        </fieldset>
+        {{ form_row(form.save) }}
+    {{ form_end(form) }}
+    <script>
+    
+    let errors = document.querySelectorAll(".error");
+    
+    if (errors.length>0)
+        document.title = "Erreur : impossible de valider le formulaire " + document.title
+    
+    if (errors.length>1) {
+        idMsgError.innerHTML="Votre formulaire contient " + errors.length + " erreurs.";
+    }
+    
+    </script>
 {% endblock %}

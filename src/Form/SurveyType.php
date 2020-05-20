@@ -21,9 +21,18 @@ class SurveyType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre du sondage :',
+                'attr' => [
+                    'autofocus' => true,
+                    'placeholder' => 'Entrez le titre du sondage',
+                ],
             ])
             ->add('question', TextareaType::class, [
-                'label' => 'Consigne donnée :'
+                'label' => 'Consigne donnée :',
+                'attr' => [
+                    'placeholder' => 'Entrez la consigne donnée',
+                    'rows' => 10,
+                    'cols' => 20,
+                ],
             ])
             ->add('multiple', CheckboxType::class, [
                 'label' => 'Plusieurs réponses possibles.',
@@ -42,10 +51,12 @@ class SurveyType extends AbstractType
             ])
             ->add('closing_message', TextareaType::class, [
                 'label' => 'Message de clôture du sondage :',
-                'attr' => array(
-                    'placeholder' => 'Le sondage est clôt.'
-                ),
-                'required' => false,
+                'data' => 'Le sondage a été clôturé.',
+                'attr' => [
+                    'placeholder' => 'Entrez le message de clôture du sondage',
+                    'rows' => 10,
+                    'cols' => 20,
+                ],
              ]);
             $builder->add('propositions', CollectionType::class, [
                 'entry_type' => PropositionType::class,

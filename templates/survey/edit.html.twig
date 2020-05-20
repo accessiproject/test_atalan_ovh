@@ -1,41 +1,38 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'custom_style_bootstrap.html.twig' %}
 
 {% block title %}
     {{ id ? 'Modification du sondage' : 'Création d\'un nouveau sondage' }}
 {% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'form'}}) }}
         <h1>{{ id ? 'Modification du sondage' : 'Création d\'un nouveau sondage' }}</h1>
         <fieldset>
             <legend>
-                <h2>Informations générales sur le sondage :</h2>
+                <h2>Informations générales</h2>
             </legend>
-            <div class="form-group">
-                {{ form_row(form.title) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.title) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.status) }}
-                {{ form_widget(form.status) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.closing_message) }}
-            </div>
+            {{ form_row(form.title) }}        <p>
+            {{ form_label(form.status) }}
+            <ul>
+                {% for statu in form.status %}
+                    <li>
+                        {{ form_widget(statu) }}
+                        {{ form_label(statu) }}
+                    </li>
+                {% endfor %}
+            </ul>
+            {{ form_row(form.closing_message) }}
         </fieldset>
         <fieldset>
             <legend>
-                <h2>Question :</h2>
+                <h2>Question</h2>
             </legend>
-            <div class="form-group">
-                {{ form_row(form.question) }}
-            </div>
+            {{ form_row(form.question) }}
         </fieldset>
         <fieldset>
             <legend>
-                <h3>Liste des composants techniques :</h3>
+                <h3>Liste des composants techniques</h3>
             </legend>
             <ol id="idOlComponent" class="technicalComponents" data-prototype="{{ form_widget(form.technicalComponents.vars.prototype)|e('html_attr') }}">
                 {# iterate over each existing proposition and render its only field: wording #}
@@ -52,11 +49,9 @@
         </fieldset>
         <fieldset>
             <legend>
-                <h2>Réponses :</h2>
+                <h2>Réponses</h2>
             </legend>
-            <div class="form-group">
-                {{ form_row(form.multiple) }}
-            </div>
+            {{ form_row(form.multiple) }}
             <ol id="idOlProposition" class="propositions" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">
                 {# iterate over each existing proposition and render its only field: wording #}
                 {% for proposition in form.propositions %}
@@ -67,7 +62,7 @@
             </ol>
             <div id="add_button"></div>
         </fieldset>
-        <button type="submit">
+        <button class="btn btn-primary" type="submit">
             {{ id ? 'Modifier le sondage' : 'Créer le sondage' }}</h1>
         </button>
     {{ form_end(form) }}
@@ -75,43 +70,15 @@
 <script>
 
 function proposition() {
-	let proposition = new FormCollectionTypeClass("idOlProposition","add_button","Supprimer cet élément","Ajouter une proposition de réponse","<h4>","Composant","</h4>");
+	let proposition = new FormCollectionTypeClass("idOlProposition","add_button","Retirer cette proposition de réponse","Ajouter une proposition de réponse","<h4>","Composant","</h4>");
 }
 proposition();
 
 function component() {
-    let component = new FormCollectionTypeClass("idOlComponent","add_buttoncomponent","Supprimer cet élément","Ajouter un composant technique","<h4>","Composant technique","</h4>");
-    test();
+    let component = new FormCollectionTypeClass("idOlComponent","add_buttoncomponent","Retirer ce composant technique","Ajouter un composant technique","<h4>","Composant technique","</h4>");
 }
 component();
-
-function test() {
-    var tabdiv=idOlComponent.querySelectorAll("input[type=radio]");
-    console.log(tabdiv);
-}
-
-/*
-tabdiv=idOlComponent.querySelectorAll("div");
-showcode();
-
-function test() {
-    //let tabli=idOlComponent.getElementsByTagName("li");
-    let tabradio = tabdiv[2].querySelectorAll("input[type=radio]");
-    tabradio[0].addEventListener("click",()=>showcode(),false);
-    tabradio[1].addEventListener("click",()=>showurl(),false);
-}
-test();
-
-function showcode() {
-    tabdiv[3].style.display="inline";
-    tabdiv[4].style.display="none";
-}
-
-function showurl() {
-    tabdiv[4].style.display="inline";
-    tabdiv[3].style.display="none";
-}
-*/
+        
 </script>
 
 {% endblock %}
