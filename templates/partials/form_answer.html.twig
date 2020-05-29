@@ -3,7 +3,8 @@
         <legend>
             <h1>{{ survey.title }}</h1>
         </legend>
-        <p tabindex="0">Consigne donnée : {{ survey.question }}</p>
+        <p tabindex="0">Consigne donnée :</p>
+        {{ survey.question }}
     </fieldset>
     <fieldset>
         <legend>
@@ -48,7 +49,7 @@
             <h2>Aides techniques utilisées :</h2>
             <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
         </legend>
-        {% for category in categories|sortByField('type') %}
+        {% for category in categories %}
             <fieldset>
                 <legend>
                     <h3>{{ category.type }}</h3>

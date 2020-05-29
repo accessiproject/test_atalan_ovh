@@ -62,7 +62,7 @@ class SurveyController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $proposition->setSurvey($survey);
-            $technicalComponent->setSurvey($survey);
+            $technicalComponent->setSurvey($survey);            
             $survey->updatedTimestamps();
             $survey->setClosedat(new \DateTime('now'));
 
@@ -85,7 +85,7 @@ class SurveyController extends AbstractController
     public function survey_show($id, Request $request, EntityManagerInterface $manager)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findBy([], ['type' => 'ASC']);
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer, array(
             'survey' => $survey->getId(),

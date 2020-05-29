@@ -20,22 +20,7 @@
             <p>Erreur. Page introuvable.</p>
         {% endif %}
     {% else %}
-        <p>Statut du sondage : <span id="idstatus">{{ survey.status }}</span>.</p>
-        <button onclick="changeStatus()">Modifier le statut du sondage</button>
-        <hr>
         {% include 'partials/form_answer.html.twig' %}
     {% endif %}
-    
-    <script>
-
-    function addNumberList() {
-        let idOlAnswer = document.getElementById("idOlAnswer");
-        let tablabels = idOlAnswer.getElementsByTagName("label");
-        for (let i=0;i<tablabels.length;i++) {
-            tablabels[i].innerHTML=i+1 + ". " + tablabels[i].textContent;
-        }
-    }
-    addNumberList();
-    </script>
 
 {% endblock %}

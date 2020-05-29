@@ -9,6 +9,7 @@ use App\Entity\Proposition;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\PropositionRepository;
+use App\Repository\AssistiveRepository;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -86,6 +87,9 @@ class AnswerType extends AbstractType
                 'expanded' => true,
                 'class' => Assistive::class,
                 'choice_label' => 'name',
+                'query_builder' => function(AssistiveRepository $er) {
+                    return $er->createQueryBuilder('s')->orderBy('s.name','ASC');
+                },
                 'group_by' => 'category.type',
             ]);
 
