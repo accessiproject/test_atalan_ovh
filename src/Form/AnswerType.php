@@ -53,7 +53,7 @@ class AnswerType extends AbstractType
                 'required' => false,
             ])
             ->add('accept', CheckboxType::class, [
-                'label' => 'J\'accepte de partager mes données techniques à la Société Atalan.',
+                'label' => 'J\'accepte de partager mes données techniques avec la Société Atalan.',
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer ma réponse',
@@ -88,7 +88,7 @@ class AnswerType extends AbstractType
                 'class' => Assistive::class,
                 'choice_label' => 'name',
                 'query_builder' => function(AssistiveRepository $er) {
-                    return $er->createQueryBuilder('s')->orderBy('s.name','ASC');
+                   return $er->createQueryBuilder('s')->orderBy('s.name','ASC');
                 },
                 'group_by' => 'category.type',
             ]);

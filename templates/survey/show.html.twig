@@ -1,18 +1,12 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'custom_style_bootstrap.html.twig' %}
 
 {% block title %}
-    Consultation
+    Consultation – {{ survey.title }}
 {% endblock %}
 
 {% block body %}
     {% include 'partials/form_answer.html.twig' %}
-    <div class='form-group'>
-        <hr>
-        <a role="button" class="btn btn-info" href="{{ path('survey_edit', {'id': survey.id}) }}">Modifier</a>
-        <a role="button" class="btn btn-danger" href="">Supprimer</a>
-        <a role="button" class="btn btn-info" href="{{ path('survey_list') }}">Retour aux autres sondages</a>
-    </div>
-
     <script>
 
     function addNumberList() {

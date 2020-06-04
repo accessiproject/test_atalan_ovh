@@ -1,30 +1,18 @@
-{{ form_start(form) }}
-    <fieldset>
-        <legend>
-            <h1>{{ survey.title }}</h1>
-        </legend>
-        <p tabindex="0">Consigne donnée :</p>
-        {{ survey.question }}
-    </fieldset>
-    <fieldset>
-        <legend>
-            <h2>Liste des composants techniques à tester :</h2>
-        </legend>
-        {% for technicalComponent in survey.technicalComponents %}
-            <fieldset>
-                <legend>
-                    <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
-                </legend>
-                {% if technicalComponent.choice > 0 %}
-                    {{ technicalComponent.code }}
-                {% else %}
-                    <p>
-                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'id': technicalComponent.id }) }}">{{ technicalComponent.url }}</a>
-                    </p>
-                {% endif %}
-            </fieldset>
-        {% endfor %}
-    </fieldset>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'form'}}) }}
+    <h1>{{ survey.title }}</h1>
+    <p tabindex="0">Consigne donnée :</p>
+    {{ survey.question }}
+    <h2>Liste des composants techniques à tester :</h2>
+    {% for technicalComponent in survey.technicalComponents %}
+        <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+            {% if technicalComponent.choice > 0 %}
+                {{ technicalComponent.code }}
+            {% else %}
+                <p>
+                    <a target="_blank" href="{{ path('survey_technicalcomponent', {'id': technicalComponent.id }) }}">{{ technicalComponent.url }}</a>
+                </p>
+            {% endif %}
+    {% endfor %}
     <fieldset>
         <legend>
             <h2>Réponses proposées :</h2>

@@ -43,7 +43,7 @@ class SurveyController extends AbstractController
     }
 
     /**
-     * @Route("/editionsondage/{id}", name="survey_edit")
+     * @Route("/sondage/edition/{id}", name="survey_edit")
      */
     public function survey_edit($id, Request $request, EntityManagerInterface $manager)
     {
@@ -63,14 +63,13 @@ class SurveyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $proposition->setSurvey($survey);
             $technicalComponent->setSurvey($survey);            
-            $survey->updatedTimestamps();
-            $survey->setClosedat(new \DateTime('now'));
+            $survey->timeStamps();
 
             // Enregistre le sondage en base
             $manager->persist($survey);
             $manager->flush();
 
-            return $this->redirectToRoute('survey_list');
+            return $this->redirectToRoute('survey_show', ['id' => $survey->getId() ]);
         }
         return $this->render('survey/edit.html.twig', [
             'controller_name' => 'SurveyController',
@@ -80,7 +79,7 @@ class SurveyController extends AbstractController
     }
 
     /**
-     * @Route("/consultation/{id}", name="survey_show")
+     * @Route("/sondage/consultation/{id}", name="survey_show")
      */
     public function survey_show($id, Request $request, EntityManagerInterface $manager)
     {
@@ -131,7 +130,7 @@ class SurveyController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="survey_delete")
+     * @Route("/sondage/suppression/{id}", name="survey_delete")
      */
     public function survey_delete($id, EntityManagerInterface $manager)
     {
@@ -144,7 +143,7 @@ class SurveyController extends AbstractController
     }
 
     /**
-     * @Route("/result/{id}", name="survey_result")
+     * @Route("/sondage/resultat/{id}", name="survey_result")
      */
     public function survey_result($id, Request $request)
     {
@@ -284,5 +283,17 @@ class SurveyController extends AbstractController
         //$json=array();
         $json=json_encode($responseArray);
         return new response($json);
+    }
+
+    /**
+     * @Route("/composant//{id}", name="survey_technicalcomponent")
+     */
+    public function answer_technicalcomponent($id)
+    {
+        $technicalComponent = $this->getDoctrine()->getRepository(TechnicalComponent::class)->find($id);
+        return $this->render('survey/technicalcomponent.html.twig', [
+            'controller_name' => 'SurveyController',
+            'technicalComponent' => $technicalComponent,
+        ]);
     }
 }

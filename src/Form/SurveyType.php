@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class SurveyType extends AbstractType
 {
@@ -27,13 +26,10 @@ class SurveyType extends AbstractType
                     'placeholder' => 'Entrez le titre du sondage',
                 ],
             ])
-            ->add('question', ckeditorType::class, [
-                'label' => 'Consigne donnée :',
-                'config' => [
-                    'language' => 'fr',
-                ],
+            ->add('question', TextareaType::class, [
+                'label' => 'Question :',
                 'attr' => [
-                    'placeholder' => 'Entrez la consigne donnée',
+                    'placeholder' => 'Entrez la question',
                     'rows' => 10,
                     'cols' => 20,
                 ],
@@ -45,10 +41,9 @@ class SurveyType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut du sondage :',
                 'expanded' => true,
-                'data' => 'Initialisé',
+                'data' => 'draft',
                 'choices' => [
-                    'Annulé' => 'Annulé',
-                    'Initialisé' => 'Initialisé',
+                    'Brouillon' => 'Brouillon',
                     'Ouvert' => 'Ouvert',
                     'Fermé' => 'Fermé',
                 ],

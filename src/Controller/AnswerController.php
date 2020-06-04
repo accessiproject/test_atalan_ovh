@@ -24,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/reponses/{id}", name="answer_list")
+     * @Route("/reponse/liste/{id}", name="answer_list")
      */
     public function answer_list($id)
     {
@@ -36,7 +36,7 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/sup/{id}", name="answer_delete")
+     * @Route("/reponse/suppression/{id}", name="answer_delete")
      */
     public function answer_delete($id, EntityManagerInterface $manager)
     {
@@ -49,12 +49,12 @@ class AnswerController extends AbstractController
     }   
 
     /**
-     * @Route("/repondre/{id}", name="answer_answer")
+     * @Route("/reponse/test/{id}", name="answer_answer")
      */
     public function answer_answer($id, Request $request, EntityManagerInterface $manager)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findBy([], ['type' => 'ASC']);
         $answer = new Answer();
         $form = $this->createForm(AnswerType::class, $answer, array(
             'survey' => $survey->getId(),
@@ -101,7 +101,7 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/thank_you", name="answer_thank_you")
+     * @Route("/reponse/remerciement", name="answer_thank_you")
      */
     public function answer_thank_you()
     {
@@ -111,7 +111,7 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/title_technicalcomponent/{id}", name="answer_technicalcomponent")
+     * @Route("/composant-technique//{id}", name="answer_technicalcomponent")
      */
     public function answer_technicalcomponent($id)
     {

@@ -189,9 +189,10 @@ class Survey
     * @ORM\PrePersist
     * @ORM\PreUpdate
     */
-    public function updatedTimestamps(): void {
+    public function timeStamps(): void {
         $dateTimeNow = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->setUpdatedat($dateTimeNow);
+        $this->setClosedat($dateTimeNow);
         if ($this->getCreatedat() === null) {
             $this->setCreatedat($dateTimeNow);
         }

@@ -43,7 +43,7 @@
                         </ul>
                     </td>
                     <td>{{ answer.userAgent }}</td>
-                    <td><a role="button" class="btn btn-danger" href="{{ path('answer_delete', {'id': answer.id}) }}">Supprimer</a></td>
+                    <td><a class="btn btn-danger" href="{{ path('answer_delete', {'id': answer.id}) }}">Supprimer</a></td>
                 </tr>
             {% endfor %}    
         </tbody>
