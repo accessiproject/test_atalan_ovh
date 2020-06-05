@@ -28,8 +28,23 @@ class Survey
     /**
      * @ORM\Column(type="string", length=500)
      * @Assert\NotBlank(message="Erreur. Ce champ est obligatoire.") 
+     */   
+     protected $question;
+
+     /**
+     * @ORM\Column(type="text", nullable=true)
+     */   
+    protected $information;
+
+    /**
+     * @ORM\Column(type="boolean")
      */
-    protected $question;
+    protected $need_component;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $show_assistive;
 
     /**
      * @ORM\Column(type="boolean")
@@ -109,6 +124,42 @@ class Survey
     public function setQuestion(string $question): self
     {
         $this->question = $question;
+
+        return $this;
+    }
+
+    public function getInformation(): ?string
+    {
+        return $this->information;
+    }
+
+    public function setInformation(string $information): self
+    {
+        $this->information = $information;
+
+        return $this;
+    }
+
+    public function getNeedComponent(): ?bool
+    {
+        return $this->need_component;
+    }
+
+    public function setNeedComponent(bool $need_component): self
+    {
+        $this->need_component = $need_component;
+
+        return $this;
+    }
+
+    public function getShowAssistive(): ?bool
+    {
+        return $this->show_assistive;
+    }
+
+    public function setShowAssistive(bool $show_assistive): self
+    {
+        $this->show_assistive = $show_assistive;
 
         return $this;
     }

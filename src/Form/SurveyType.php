@@ -34,6 +34,23 @@ class SurveyType extends AbstractType
                     'cols' => 20,
                 ],
             ])
+            ->add('information', TextareaType::class, [
+                'label' => 'Informations complémentaires :',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Entrez des informations complémentaires',
+                    'rows' => 10,
+                    'cols' => 20,
+                ],
+            ])
+            ->add('show_assistive', CheckboxType::class, [
+                'label' => 'Afficher la liste des technologies d\'assistance',
+                'required' => false,
+            ])
+            ->add('need_component', CheckboxType::class, [
+                'label' => 'Besoin d\'implémenter un composant technique',
+                'required' => false,
+            ])
             ->add('multiple', CheckboxType::class, [
                 'label' => 'Plusieurs réponses possibles.',
                 'required' => false,
