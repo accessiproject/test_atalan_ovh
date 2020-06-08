@@ -37,6 +37,7 @@
                 {% for technicalComponent in form.technicalComponents %}
                     <li>
                         {{ form_row(technicalComponent.title) }}
+                        {{ form_row(technicalComponent.description) }}
                         {{ form_row(technicalComponent.choice) }}
                         {{ form_row(technicalComponent.code) }}
                         {{ form_row(technicalComponent.url) }}

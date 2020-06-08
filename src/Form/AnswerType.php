@@ -19,7 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AnswerType extends AbstractType
 {
@@ -29,6 +28,9 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $survey = $options['survey'];
+        $categories = $options['categories'];
+        $need_component = $options['need_component'];
+        $show_assistive = $options['show_assistive'];
         $multiple = $options['multiple'];
 
         if ($multiple == 1)
@@ -42,10 +44,11 @@ class AnswerType extends AbstractType
             $wording = $proposition->getWording();
             $choices[$wording] = $id;
         }
-        
+
+
         $builder
             ->add('comment', TextareaType::class, [
-                'label' => 'Commentaire (facultatif) :',
+                'label' => 'Votre commentaire (facultatif) :',
                 'required' => false,
             ])
             ->add('email', EmailType::class, [
@@ -54,45 +57,45 @@ class AnswerType extends AbstractType
             ])
             ->add('accept', CheckboxType::class, [
                 'label' => 'J\'accepte de partager mes données techniques avec la Société Atalan.',
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer ma réponse',
-            ]);
-        
-        if ($param == "false") {    
-            $builder
-                ->add('propositions', ChoiceType::class, array(
-                    'choices' => $choices,
-                    'expanded' => true,
-                    'multiple' => false
-                ));
-        } else {
-            $builder
-                ->add('propositions', EntityType::class, [
-                    'class' => Proposition::class,
-                    'expanded' => true,
-                    'multiple' => true,
-                    'query_builder' => function (EntityRepository $proposition) use ($survey) {
-                        return $proposition->createQueryBuilder('u')
-                            ->where('u.survey = :survey')
-                            ->setParameter('survey', $survey);
-                    },
-                    'choice_label' => 'wording',
-                ]);
-        }
-        
-        $builder
-            ->add('assistives', EntityType::class,  [
-                'multiple' => true,
-                'expanded' => true,
-                'class' => Assistive::class,
-                'choice_label' => 'name',
-                'query_builder' => function(AssistiveRepository $er) {
-                   return $er->createQueryBuilder('s')->orderBy('s.name','ASC');
-                },
-                'group_by' => 'category.type',
+                'required' => false,
             ]);
 
+        if (!empty($choices)) {
+            if ($param == "false") {
+                $builder
+                    ->add('propositions', ChoiceType::class, array(
+                        'choices' => $choices,
+                        'expanded' => true,
+                        'multiple' => false,
+                    ));
+            } else {
+                $builder
+                    ->add('propositions', EntityType::class, [
+                        'class' => Proposition::class,
+                        'expanded' => true,
+                        'multiple' => true,
+                        'query_builder' => function (EntityRepository $proposition) use ($survey) {
+                            return $proposition->createQueryBuilder('u')
+                                ->where('u.survey = :survey')
+                                ->setParameter('survey', $survey);
+                        },
+                        'choice_label' => 'wording',
+                    ]);
+            }
+        }
+        
+        if (!empty($categories)) {
+            if ($show_assistive > 0) {
+                $builder
+                    ->add('assistives', EntityType::class,  [
+                        'multiple' => true,
+                        'expanded' => true,
+                        'class' => Assistive::class,
+                        'choice_label' => 'name',
+                        'group_by' => 'category.type',
+                    ]);
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -101,10 +104,10 @@ class AnswerType extends AbstractType
             'data_class' => Answer::class,
             'survey' => null,
             'multiple' => null,
+            'need_component' => null,
+            'show_assistive' => null,
             'propositions' => null,
             'categories' => null,
         ]);
     }
-
-    
 }

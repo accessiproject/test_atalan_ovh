@@ -133,7 +133,7 @@ class Survey
         return $this->information;
     }
 
-    public function setInformation(string $information): self
+    public function setInformation(?string $information): self
     {
         $this->information = $information;
 

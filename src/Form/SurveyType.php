@@ -58,7 +58,7 @@ class SurveyType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut du sondage :',
                 'expanded' => true,
-                'data' => 'draft',
+                'data' => $options['status'],
                 'choices' => [
                     'Brouillon' => 'Brouillon',
                     'Ouvert' => 'Ouvert',
@@ -94,6 +94,7 @@ class SurveyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Survey::class,
+            'status' => null,
         ]);
     }
 }

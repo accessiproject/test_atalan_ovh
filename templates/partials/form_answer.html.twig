@@ -1,10 +1,17 @@
-{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'form'}}) }}
-    <h1>{{ survey.title }}</h1>
-    <p tabindex="0">Consigne donnée :</p>
-    {{ survey.question }}
-    <h2>Liste des composants techniques à tester :</h2>
-    {% for technicalComponent in survey.technicalComponents %}
-        <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <h1 tabindex="0"s>{{ survey.title }}</h1>
+    <h2 tabindex="0">Question</h2>
+    <p tabindex="0">{{ survey.question }}</p>
+    {% if survey.information is defined %}
+        <p tabindex="0">{{ survey.information }}</p>
+    {% endif %}
+    {% if survey.needComponent > 0 %}
+        <h2>Liste des composants techniques à tester :</h2>
+        {% for technicalComponent in survey.technicalComponents %}
+            <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+            {% if technicalComponent.description %}
+                {{ technicalComponent.description }}
+            {% endif %}
             {% if technicalComponent.choice > 0 %}
                 {{ technicalComponent.code }}
             {% else %}
@@ -12,46 +19,58 @@
                     <a target="_blank" href="{{ path('survey_technicalcomponent', {'id': technicalComponent.id }) }}">{{ technicalComponent.url }}</a>
                 </p>
             {% endif %}
-    {% endfor %}
+        {% endfor %}
+    {% endif %}
     <fieldset>
         <legend>
-            <h2>Réponses proposées :</h2>
+            <h2>Réponses proposées</h2>
             <p>{{ survey.multiple ? '(plusieurs réponses possibles).' : '(une seule réponse possible).' }}</p>
         </legend>
-        <ol id="idOlAnswer">
-            {% for proposition in form.propositions %}
-                {{ form_widget(proposition) }}
-                {{ form_label(proposition) }}</br> 
-            {% endfor %}
-        </ol>
+        {% if form.propositions is defined %}
+            <ol id="idOlAnswer">
+                {% for proposition in form.propositions %}
+                    {{ form_widget(proposition) }}
+                    {{ form_label(proposition) }}
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>Aucune proposition de réponse n'a été ajoutée au sondage.</p>
+        {% endif %}
     </fieldset>
-    <fieldset>
-        <legend>
-            <h2>Informations complémentaires :</h2>
-        </legend>
-        {{ form_row(form.comment) }}
-        {{ form_row(form.email) }}
-    </fieldset>
-    <fieldset>
-        <legend>
-            <h2>Aides techniques utilisées :</h2>
-            <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
-        </legend>
-        {% for category in categories %}
-            <fieldset>
-                <legend>
-                    <h3>{{ category.type }}</h3>
-                </legend>    
-                {% for assistive in category.assistives %}
-                    {% set key = assistive.id %}
-                    {{ form_row(form.assistives[key]) }}
-                {% endfor %}            
+    {% if survey.showAssistive > 0 %}
+        <fieldset>
+            <legend>
+                <h2>Aides techniques utilisées</h2>
+                <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
+            </legend>
+            {% if categories %}
+                {% for category in categories %}
+                    <fieldset>
+                        <legend>
+                            <h3>{{ category.type }}</h3>
+                        </legend>    
+                        {% for assistive in category.assistives %}
+                            {% set key = assistive.id %}
+                            {{ form_row(form.assistives[key]) }}
+                        {% endfor %}            
+                    </fieldset>
+                {% endfor %}
+            {% else %}
+                <p>Aucune technologie d'assistance n'a été enregistrée dans l'application.</p>
+            {% endif %}
             </fieldset>
-        {% endfor %}
-    </fieldset>
-    <hr>
-    <fieldset>
-        {{ form_row(form.accept) }}
-        {{ form_row(form.save) }}
-    </fieldset>
+        {% endif %}
+        <fieldset>
+            <legend>
+                <h2>Informations complémentaires</h2>
+            </legend>
+            {{ form_row(form.comment) }}
+            {{ form_row(form.email) }}
+        </fieldset>
+        <fieldset>
+            {{ form_row(form.accept) }}
+            <button type="submit">
+                Envoyer mes réponses
+            </button>
+        </fieldset>
 {{ form_end(form) }}

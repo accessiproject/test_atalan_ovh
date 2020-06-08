@@ -34,17 +34,17 @@
                             – En cours de soumission
                         {% endif %}
                     </td>
-                    <td><a class="btn btn-light" href="{{ path('survey_show', {'id': survey.id}) }}">Voir</a></td>
+                    <td><a class="btn btn-light" href="{{ path('answer_survey', {'id': survey.id}) }}">Voir</a></td>
                     <td><a class="btn btn-info" href="{{ path('survey_edit', {'id': survey.id}) }}">Modifier (MAJ {{ survey.updatedat|date("d/m/Y H:i") }})</a></td>
                     <td><a class="btn btn-warning" onclick="return confirm('êtes-vous sûr de vouloir supprimer ce sondage?');" href="{{ path('survey_delete', {'id': survey.id}) }}">Supprimer</a></td>
                     <td><a class="btn btn-info" href="{{ path('survey_result', {'id': survey.id}) }}">Voir les résultats ({{ survey.answers|length }})</a></td>
                     <td><a class="btn btn-light" href="{{ path('answer_list', {'id': survey.id}) }}">Gérer</a></td>
                     <td>
-                        <a target="_blank" class="btn btn-light" id="idLink" href="{{ path('answer_answer', {'id': survey.id}) }}">Répondre</a>
+                        <a target="_blank" class="btn btn-light" id="idLink" href="{{ path('answer_survey', {'id': survey.id}) }}">Répondre</a>
                         {% if survey.status=="Ouvert" %}
-                            <input type="text" id="idurl" value="{{ url('answer_answer', {'id': survey.id}) }}">
+                            <input type="text" id="idurl" value="{{ url('answer_survey', {'id': survey.id}) }}">
                         {% else %}
-                            <input type="text" id="idurl" value="{{ url('answer_answer', {'id': survey.id}) }}" disabled>
+                            <input type="text" id="idurl" value="{{ url('answer_survey', {'id': survey.id}) }}" disabled>
                         {% endif %}
                     </td>                            
                 </tr>

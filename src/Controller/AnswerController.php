@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use WhichBrowser;
+//use WhichBrowser;
 use App\Entity\Answer;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Assistive;
@@ -14,12 +14,13 @@ use App\Entity\TechnicalComponent;
 use App\Repository\AnswerRepository;
 use App\Repository\PropositionRepository;
 use App\Repository\AssistiveRepository;
+use App\Repository\SurveyRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use App\Service\WhichBrowserService;
 
 class AnswerController extends AbstractController
 {
@@ -46,12 +47,12 @@ class AnswerController extends AbstractController
         return $this->redirectToRoute('answer_list', [
             'id' => $answer->getId(),
         ]);
-    }   
-
+    }
+    
     /**
-     * @Route("/reponse/test/{id}", name="answer_answer")
+     * @Route("/sondage/consultation/{id}", name="answer_survey")
      */
-    public function answer_answer($id, Request $request, EntityManagerInterface $manager)
+    public function answer_survey($id, Request $request, EntityManagerInterface $manager, WhichBrowserService $whichBrowserService)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
         $categories = $this->getDoctrine()->getRepository(Category::class)->findBy([], ['type' => 'ASC']);
@@ -59,23 +60,18 @@ class AnswerController extends AbstractController
         $form = $this->createForm(AnswerType::class, $answer, array(
             'survey' => $survey->getId(),
             'multiple' => $survey->getMultiple(),
+            'need_component' => $survey->getNeedComponent(),
+            'show_assistive' => $survey->getShowAssistive(),
             'propositions' => $survey->getPropositions(),
+            'categories' => $categories,
         ));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $answer->setSurvey($survey);
-            $answer->setCreatedat(new \DateTime('now'));
+            $answer->setCreatedat(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
             $answer->setAcceptedat(new \DateTime('now'));
-            $result = new WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
-            $answer->setUserAgent($_SERVER['HTTP_USER_AGENT']);
-            $answer->setDeviceType($result->device->type);
-            $answer->setDeviceIdentifier($result->device->identifier);
-            $answer->setDeviceManufacturer($result->device->manufacturer);
-            $answer->setDeviceModel($result->device->model);
-            $answer->setOsName($result->os->name);
-            $answer->setOsVersion($result->os->version->toString());
-            $answer->setBrowserName($result->browser->name);
-            $answer->setBrowserVersion($result->browser->version->toString());
+            $whichBrowserService->getTechnicalDatas($answer);
+            
             if ($survey->getMultiple() > 0) {
                 foreach ($form["propositions"]->getData() as $proposition)
                     $answer->addProposition($proposition);
@@ -83,23 +79,24 @@ class AnswerController extends AbstractController
                 $proposition = $this->getDoctrine()->getRepository(Proposition::class)->find($form['propositions']->getData());
                 $answer->setPropositions($proposition);
             }
-            
-            foreach ($form["assistives"]->getData() as $assistive)
-                $answer->addAssistive($assistive);
-            
+
+            if ($survey->GetShowAssistive() > 1) {
+                foreach ($form["assistives"]->getData() as $assistive)
+                    $answer->addAssistive($assistive);
+            }
+
             $manager->persist($answer);
             $manager->flush();
-            $this->addFlash('success', 'Votre réponse a bien été enregistrée.');
-            return $this->redirectToRoute('answer_thank_you');
+            return $this->redirectToRoute('answer_list');
         }
-        return $this->render('answer/answer.html.twig', [
+        return $this->render('answer/survey.html.twig', [
             'controller_name' => 'AnswerController',
             'form' => $form->createView(),
             'survey' => $survey,
             'categories' => $categories,
         ]);
     }
-
+    
     /**
      * @Route("/reponse/remerciement", name="answer_thank_you")
      */

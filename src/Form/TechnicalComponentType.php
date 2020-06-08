@@ -20,6 +20,9 @@ class TechnicalComponentType extends AbstractType
                 'label' => 'Titre',
                 'required' => true,
             ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description (facultatif)',
+            ])
             ->add('choice', ChoiceType::class, [
                 'label' => 'L\'implémentation :',
                 'expanded' => true,
