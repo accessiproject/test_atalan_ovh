@@ -5,9 +5,17 @@
 {% endblock %}
 
 {% block body %}
-    <p><a href="{{ path('answer_answer', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    {% if action == "sondage" %}
+        <p><a href="{{ path('answer_survey', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    {% else %}
+        <p><a href="{{ path('survey_show', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    {% endif %}
     <hr>
     <iframe title="{{ technicalComponent.title }}" src="{{ technicalComponent.url }}"></iframe>
     <hr>
-    <p><a href="{{ path('answer_answer', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    {% if action == "sondage" %}
+        <p><a href="{{ path('answer_survey', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    {% else %}
+        <p><a href="{{ path('survey_show', {'id': technicalComponent.survey.id }) }}">Retour au sondage</a></p>
+    {% endif %}
 {% endblock %}

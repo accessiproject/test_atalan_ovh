@@ -49,9 +49,9 @@ class SurveyController extends AbstractController
     public function survey_edit($id, Request $request, EntityManagerInterface $manager)
     {
 
-        if ($id > 0)
+        if ($id > 0) {
             $survey = $manager->getRepository(Survey::class)->find($id);
-        else {
+        } else {
             $survey = new Survey();
             $survey->setStatus("Brouillon");
         }
@@ -62,7 +62,8 @@ class SurveyController extends AbstractController
         $survey->getTechnicalComponents()->add($technicalComponent);
 
         $form = $this->createForm(SurveyType::class, $survey, [
-            'status' => $survey->getStatus()
+            'status' => $survey->getStatus(),
+            'technicalcomponents' => $survey->getTechnicalComponents(),
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,7 +75,7 @@ class SurveyController extends AbstractController
             $manager->persist($survey);
             $manager->flush();
 
-            return $this->redirectToRoute('answer_survey', ['id' => $survey->getId()]);
+            return $this->redirectToRoute('survey_show', ['id' => $survey->getId()]);
         }
         return $this->render('survey/edit.html.twig', [
             'controller_name' => 'SurveyController',
@@ -241,17 +242,5 @@ class SurveyController extends AbstractController
         //$json=array();
         $json = json_encode($responseArray);
         return new response($json);
-    }
-
-    /**
-     * @Route("/composant//{id}", name="survey_technicalcomponent")
-     */
-    public function answer_technicalcomponent($id)
-    {
-        $technicalComponent = $this->getDoctrine()->getRepository(TechnicalComponent::class)->find($id);
-        return $this->render('survey/technicalcomponent.html.twig', [
-            'controller_name' => 'SurveyController',
-            'technicalComponent' => $technicalComponent,
-        ]);
     }
 }

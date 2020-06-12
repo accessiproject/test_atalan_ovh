@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'custom_style_bootstrap.html.twig' %}
+
+{% block title %}
+    Consultation – {{ survey.title }}
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/form_answer.html.twig' %}
+    <script>
+
+    function addNumberList() {
+        let idOlAnswer = document.getElementById("idOlAnswer");
+        let tablabels = idOlAnswer.getElementsByTagName("label");
+        for (let i=0;i<tablabels.length;i++) {
+            tablabels[i].innerHTML=i+1 + ". " + tablabels[i].textContent;
+        }
+    }
+    addNumberList();
+
+    </script>
+{% endblock %}

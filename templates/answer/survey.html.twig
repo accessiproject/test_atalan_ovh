@@ -1,12 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_answer_for_test.html.twig' %}
 {% form_theme form 'custom_style_bootstrap.html.twig' %}
 
 {% block title %}
-    Consultation – {{ survey.title }}
+    {% if not app.user %}
+        {% if survey.status=="Ouvert" %}
+            {{ survey.title }}
+        {% else %}
+            {{ survey.closingMessage }}
+        {% endif %}
+    {% else %}
+        {{ survey.title }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
-    {% include 'partials/form_answer.html.twig' %}
+    {% if not app.user %}
+        {% if survey.status=="Ouvert" %}
+            {% include 'partials/form_answer.html.twig' %}
+        {% else %}
+            {{ survey.closingMessage }}
+        {% endif %}
+    {% else %}
+        {% include 'partials/form_answer.html.twig' %}
+    {% endif %}
     <script>
 
     function addNumberList() {

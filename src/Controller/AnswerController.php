@@ -26,6 +26,7 @@ class AnswerController extends AbstractController
 {
     /**
      * @Route("/reponse/liste/{id}", name="answer_list")
+      * @IsGranted("ROLE_ADMIN")
      */
     public function answer_list($id)
     {
@@ -38,6 +39,7 @@ class AnswerController extends AbstractController
 
     /**
      * @Route("/reponse/suppression/{id}", name="answer_delete")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function answer_delete($id, EntityManagerInterface $manager)
     {
@@ -50,9 +52,11 @@ class AnswerController extends AbstractController
     }
     
     /**
-     * @Route("/sondage/consultation/{id}", name="answer_survey")
+    * @Route("/sondage/consultation/{id}", name="survey_show") 
+    * @Route("/repondre/sondage/{id}", name="answer_survey")
+    * @param $_route
      */
-    public function answer_survey($id, Request $request, EntityManagerInterface $manager, WhichBrowserService $whichBrowserService)
+    public function answer($_route, $id, Request $request, EntityManagerInterface $manager, WhichBrowserService $whichBrowserService)
     {
         $survey = $this->getDoctrine()->getRepository(Survey::class)->find($id);
         $categories = $this->getDoctrine()->getRepository(Category::class)->findBy([], ['type' => 'ASC']);
@@ -87,9 +91,16 @@ class AnswerController extends AbstractController
 
             $manager->persist($answer);
             $manager->flush();
-            return $this->redirectToRoute('answer_list');
+
+            if ($_route=="survey_show")
+                return $this->redirectToRoute('survey_list');
+            else
+                return $this->redirectToRoute('answer_thank_you');
+        
         }
-        return $this->render('answer/survey.html.twig', [
+        
+        $render = $_route=="survey_show" ? 'survey/show.html.twig' : 'answer/survey.html.twig';
+        return $this->render($render, [
             'controller_name' => 'AnswerController',
             'form' => $form->createView(),
             'survey' => $survey,
@@ -108,14 +119,16 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/composant-technique//{id}", name="answer_technicalcomponent")
+    * @Route("/{entity}/{action}/composant-technique/{id}", name="answer_technicalcomponent") 
      */
-    public function answer_technicalcomponent($id)
+    public function technicalcomponent($entity, $action, $id)
     {
         $technicalComponent = $this->getDoctrine()->getRepository(TechnicalComponent::class)->find($id);
         return $this->render('answer/technicalcomponent.html.twig', [
             'controller_name' => 'AnswerController',
             'technicalComponent' => $technicalComponent,
+            'entity' => $entity,
+            'action' => $action,
         ]);
     }
 }

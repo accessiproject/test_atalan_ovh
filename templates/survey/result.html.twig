@@ -53,10 +53,8 @@
         </table>
         <script>
 
-var url_ajax = "http://sondage.atalan.fr/survey_atalan/public/index.php/";
-// "http://127.0.0.1:8000/";
-
-
+var url_ajax = "http://127.0.0.1:8000/";
+//"http://sondage.atalan.fr/survey_atalan/public/index.php/";
 
 //var urlcourante = document.location.href;
 //console.log("url : " + urlcourante);
@@ -117,7 +115,6 @@ function creationParameter() {
 
 function creationTable(parameter) {
     var para ="survey={{ survey.id }}&" + parameter;
-    console.log(para);
     xmlhttp=getXmlhttp();
     xmlhttp.open("GET",url_ajax+"ajaxtable?"+para,true);
     xmlhttp.onreadystatechange=mafonction;
@@ -125,7 +122,6 @@ function creationTable(parameter) {
     function mafonction() {
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {
             var result = JSON.parse(xmlhttp.responseText);
-            //console.log(result);
             let parent = document.getElementById("idBodyResult");
             parent.innerHTML="";        
             for (let i=0;i<result.length;i++) {

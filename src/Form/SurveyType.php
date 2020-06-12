@@ -18,6 +18,16 @@ class SurveyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
+        
+        /*
+        $choices = array();
+        foreach ($options['technicalcomponents'] as $technicalcomponent) {
+            $id = $technicalcomponent->getId();
+            $ = $proposition->getWording();
+            $choices[$wording] = $id;
+        }
+        */
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre du sondage :',
@@ -95,6 +105,7 @@ class SurveyType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Survey::class,
             'status' => null,
+            'technicalcomponents' => null,
         ]);
     }
 }

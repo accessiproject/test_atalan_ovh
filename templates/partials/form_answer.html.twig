@@ -6,7 +6,9 @@
         <p tabindex="0">{{ survey.information }}</p>
     {% endif %}
     {% if survey.needComponent > 0 %}
-        <h2>Liste des composants techniques à tester :</h2>
+        {% if survey.technicalComponents|length > 1 %}
+            <h2>Liste des composants techniques</h2>
+        {% endif %}
         {% for technicalComponent in survey.technicalComponents %}
             <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
             {% if technicalComponent.description %}
@@ -16,7 +18,11 @@
                 {{ technicalComponent.code }}
             {% else %}
                 <p>
-                    <a target="_blank" href="{{ path('survey_technicalcomponent', {'id': technicalComponent.id }) }}">{{ technicalComponent.url }}</a>
+                    {% if app.request.attributes.get('_route') == "answer_survey" %}
+                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'repondre', 'action': 'sondage', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
+                    {% else %}
+                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'sondage', 'action': 'consultation', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
+                    {% endif %}
                 </p>
             {% endif %}
         {% endfor %}
