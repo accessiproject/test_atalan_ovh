@@ -36,6 +36,14 @@ class AnswerRepository extends ServiceEntityRepository
         $results = $query->getResult();
         return $results;
     }
+
+    public function countResults($survey)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT COUNT(a) FROM App\Entity\Answer a JOIN a.propositions p WHERE a.survey=$survey");
+        $number = $query->getSingleScalarResult();
+        return $number;
+    }
     
     // /**
     //  * @return Answer[] Returns an array of Answer objects

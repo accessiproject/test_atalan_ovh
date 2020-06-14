@@ -15,7 +15,7 @@
                 {{ technicalComponent.description }}
             {% endif %}
             {% if technicalComponent.choice > 0 %}
-                {{ technicalComponent.code }}
+                {{ technicalComponent.code|raw }}
             {% else %}
                 <p>
                     {% if app.request.attributes.get('_route') == "answer_survey" %}

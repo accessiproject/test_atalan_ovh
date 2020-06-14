@@ -12,11 +12,14 @@
         <thead>
             <th scope="col">Proposition</th>
             <th scope="col">Résultat</th>
+            <th scope="col">Pourcentage</th>
         </thead>
         {% for proposition in survey.propositions %}
             <tr>
                 <th scope="row">{{ proposition.wording }}</th>
                 <td>{{ proposition.answers|length }}</td>
+                {% set pourcentage = proposition.answers|length * 100 / number_answers %}
+                <td>{{ pourcentage|number_format(2) }}%</td>
             </tr>
         {% endfor %}
         </table>
@@ -51,6 +54,7 @@
             </thead>
             <tbody id="idBodyResult"></tbody>
         </table>
+        <script src="{{ asset('_js/TableClass.js') }}"></script>
         <script>
 
 var url_ajax = "http://127.0.0.1:8000/";
@@ -121,51 +125,9 @@ function creationTable(parameter) {
     xmlhttp.send();
     function mafonction() {
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            console.log(xmlhttp.responseText);
             var result = JSON.parse(xmlhttp.responseText);
-            let parent = document.getElementById("idBodyResult");
-            parent.innerHTML="";        
-            for (let i=0;i<result.length;i++) {
-                let tr=document.createElement("tr");
-                let td_answer_id=document.createElement("td");
-                td_answer_id.innerHTML="answer n°" + result[i]["id"];
-                tr.appendChild(td_answer_id);
-                let td_answer_comment=document.createElement("td");
-                td_answer_comment.innerHTML=result[i]["comment"];
-                tr.appendChild(td_answer_comment);
-                let td_answer_email=document.createElement("td");
-                td_answer_email.innerHTML=result[i]["email"];
-                tr.appendChild(td_answer_email);
-
-                let td_proposition_wording=document.createElement("td");
-                for (let j=0;j<result[i]["proposition_wording"].length;j++) {
-                    td_proposition_wording.innerHTML+="<li>" + result[i]["proposition_wording"][j] + "</li>";
-                }
-                tr.appendChild(td_proposition_wording);
-
-                let td_answer_device_type=document.createElement("td");
-                td_answer_device_type.innerHTML=result[i]["device_type"];
-                tr.appendChild(td_answer_device_type);
-
-                let td_answer_os=document.createElement("td");
-                td_answer_os.innerHTML=result[i]["os_name"] + " " + result[i]["os_version"];
-                tr.appendChild(td_answer_os);
-
-                let td_answer_browser=document.createElement("td");
-                td_answer_browser.innerHTML=result[i]["browser_name"] + " " + result[i]["browser_version"];
-                tr.appendChild(td_answer_browser);
-
-                let td_assistive_name=document.createElement("td");
-                for (let j=0;j<result[i]["assistive_name"].length;j++) {
-                    td_assistive_name.innerHTML+="<li>" + result[i]["assistive_name"][j] + "</li>";
-                }
-                tr.appendChild(td_assistive_name);
-
-                let td_answer_user_agent=document.createElement("td");
-                td_answer_user_agent.innerHTML=result[i]["user_agent"];
-                tr.appendChild(td_answer_user_agent);
-                
-                parent.appendChild(tr);
-            }
+            let test = new TableClass(result,"idBodyResult");
         }
     }
 }
