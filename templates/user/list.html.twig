@@ -1,34 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des utilisateurs{% endblock %}
+{% block title %}Gestion des comptes utilisateurs{% endblock %}
 
 {% block body %}
-    <div>
-        <h1>Gestion des utilisateurs</h1>
-        <p>
-            <a href="{{ path('user_edit', {'id': 0}) }}">Ajouter un nouvel utilisateur</a>
-        </p>
-        <table class="table table-striped table-bordered table-hover">
-            <tr>
+    <h1>Gestion des comptes utilisateurs</h1>
+    <p>
+        <a class="btn btn-info" href="{{ path('user_edit', {'id': 0}) }}">Créer un nouveau compte utilisateur</a>
+    </p>
+    {% if users %}
+        <table class="table table-bordered table-dark">
+            <thead class="thead-light">
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Adresse email</th>
                 <th>Création</th>
-                <th>Mis à jour</th>
                 <th>Modifier</th>
                 <th>Supprimer</th>
-            </tr>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.firstname }}</td>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.createdat|date("m/d/Y H:i") }}</td>
-                    <td>{{ user.updatedat|date("m/d/Y H:i") }}</td>
-                    <td><a role="button" class="btn btn-info" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></td>
-                    <td><a role="button" class="btn btn-info" href="">Supprimer</a></td>
-                </tr>
-            {% endfor %}    
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.createdat|date("d/m/Y H:i") }}</td>
+                        <td><a class="btn btn-info" href="{{ path('user_edit', {'id': user.id}) }}">Modifier (MAJ {{ user.updatedat|date("d/m/Y H:i") }})</a></td>
+                        <td><a class="btn btn-warning" onclick="return confirm('êtes-vous sûr de vouloir supprimer ce compte utilisateur??');" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>    
         </table>
-    </div>
+    {% else %}
+        <p>Aucun compte utilisateur créé.</p>
+    {% endif %}
 {% endblock %}

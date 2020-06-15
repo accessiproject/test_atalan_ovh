@@ -19,7 +19,7 @@
                 <th scope="row">{{ proposition.wording }}</th>
                 <td>{{ proposition.answers|length }}</td>
                 {% set pourcentage = proposition.answers|length * 100 / number_answers %}
-                <td>{{ pourcentage|number_format(2) }}%</td>
+                <td>{{ pourcentage|round }}%</td>
             </tr>
         {% endfor %}
         </table>
@@ -57,8 +57,8 @@
         <script src="{{ asset('_js/TableClass.js') }}"></script>
         <script>
 
-var url_ajax = "http://127.0.0.1:8000/";
-//"http://sondage.atalan.fr/survey_atalan/public/index.php/";
+var url_ajax = "http://sondage.atalan.fr/survey_atalan/public/index.php/";
+//"http://127.0.0.1:8000/";
 
 //var urlcourante = document.location.href;
 //console.log("url : " + urlcourante);

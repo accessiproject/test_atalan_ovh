@@ -31,7 +31,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/edition-utilisateur/{id}", name="user_edit")
+     * @Route("/utilisateur/edition/{id}", name="user_edit")
      */
     public function user_edit($id, Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager)
     {
@@ -66,4 +66,16 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/utilisateur/suppression/{id}", name="user_delete")
+     */
+    public function user_delete($id, EntityManagerInterface $manager)
+    {
+        $user = $manager->getRepository(User::class)->find($id);
+        $manager->remove($user);
+        $manager->flush();
+        return $this->redirectToRoute('user_list', [
+            'id' => $user->getId(),
+        ]);
+    }
 }

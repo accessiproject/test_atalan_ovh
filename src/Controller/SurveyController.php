@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+//dependencies injection
 use App\Entity\Answer;
 use App\Entity\Assistive;
 use App\Entity\Category;
@@ -22,14 +23,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\WhichBrowserService;
-use App\Service\DeleteService;
 
+
+//The @IsGranted() annotation is the simplest way to restrict access on controller. Use it to restrict by roles,
 /**
  * @IsGranted("ROLE_ADMIN")
  */
 class SurveyController extends AbstractController
 {
 
+    //the survey_list() function displays the list of all surveys.
+    //The survey_default") route is the home page.
     /**
      * @Route("/", name="survey_default")
      * @Route("/sondages", name="survey_list")
@@ -42,7 +46,8 @@ class SurveyController extends AbstractController
             'surveys' => $surveys,
         ]);
     }
-
+    
+    //the survey_edit() function is both to create (or modify) a survey.
     /**
      * @Route("/sondage/edition/{id}", name="survey_edit")
      */
@@ -87,18 +92,14 @@ class SurveyController extends AbstractController
     /**
      * @Route("/sondage/suppression/{id}", name="survey_delete")
      */
-    public function survey_delete($id, EntityManagerInterface $manager, DeleteService $deleteService)
+    public function survey_delete($id, EntityManagerInterface $manager)
     {
         $survey = $manager->getRepository(Survey::class)->find($id);
-        $deleteService->delete($survey, "survey_list", $id, $manager);
-        /*
         $manager->remove($survey);
         $manager->flush();
         return $this->redirectToRoute('survey_list', [
             'id' => $survey->getId(),
         ]);
-        */
-
     }
 
     /**

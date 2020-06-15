@@ -25,7 +25,7 @@ use App\Service\WhichBrowserService;
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/reponse/liste/{id}", name="answer_list")
+     * @Route("/sondage/reponses/{id}", name="answer_list")
       * @IsGranted("ROLE_ADMIN")
      */
     public function answer_list($id)

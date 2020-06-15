@@ -6,27 +6,16 @@
 {% block body %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         <legend>
-            <h1>Création d'un novel utilisateur</h1>
+            <h1>{{ id ? 'Modification du compte utilisateur' : 'Création du nouveau compte utilisateur' }}</h1>
         </legend>
         <fieldset>
-            <span role="alert" id="idMsgError"></span>
             {{ form_row(form.firstname) }}
             {{ form_row(form.lastname) }}
             {{ form_row(form.email) }}
             {{ form_row(form.password) }}
         </fieldset>
-        {{ form_row(form.save) }}
+        <button class="btn btn-primary" type="submit">
+            {{ id ? 'Modifier le compte utilisateur' : 'Créer le nouveau compte utilisateur' }}
+        </button>
     {{ form_end(form) }}
-    <script>
-    
-    let errors = document.querySelectorAll(".error");
-    
-    if (errors.length>0)
-        document.title = "Erreur : impossible de valider le formulaire " + document.title
-    
-    if (errors.length>1) {
-        idMsgError.innerHTML="Votre formulaire contient " + errors.length + " erreurs.";
-    }
-    
-    </script>
 {% endblock %}

@@ -10,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class UserType extends AbstractType
@@ -20,23 +19,37 @@ class UserType extends AbstractType
         $builder
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom :',
-                'required' => false,
                 'attr' => [
                     'placeholder' => 'Entrez le prénom de l\'utilisateur',
                 ],
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Nom :',
+                'attr' => [
+                    'placeholder' => 'Entrez le nom de l\'utilisateur',
+                ],
             ])
             ->add('email', TextType::class, [
                 'label' => 'Adresse email :',
+                'attr' => [
+                    'placeholder' => 'Entrez l\'adresse email de l\'utilisateur',
+                ],
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => ['label' => 'Mot de passe :'],
-                'second_options' => ['label' => 'Confirmation du mot de passe :']
-            ])
-            ->add('save', SubmitType::class);
+                'first_options'  => [
+                    'label' => 'Mot de passe :',
+                    'attr' => [
+                        'placeholder' => 'Entrez le mot de passe de l\'utilisateur',
+                    ]
+                ],
+                'second_options' => [
+                    'label' => 'Confirmation du mot de passe :',
+                    'attr' => [
+                        'placeholder' => 'Confirmez le mot de passe de l\'utilisateur',
+                    ],
+                    ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
