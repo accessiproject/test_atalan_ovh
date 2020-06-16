@@ -1,9 +1,11 @@
 <h1 tabindex="0">{{ survey.title }}</h1>
-<h2 tabindex="0">Question</h2>
-<p tabindex="0">{{ survey.question }}</p>
-{% if survey.information is defined %}
-    <p tabindex="0">{{ survey.information }}</p>
-{% endif %}
+<div class="question">
+    <h2 tabindex="0">Question</h2>
+    <p tabindex="0">{{ survey.question }}</p>
+    {% if survey.information is defined %}
+        <p tabindex="0">{{ survey.information }}</p>
+    {% endif %}
+</div>
 {% if survey.needComponent > 0 %}
     {% if survey.technicalComponents|length > 1 %}
         <h2>Liste des composants techniques</h2>
