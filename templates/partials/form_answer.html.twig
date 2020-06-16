@@ -7,26 +7,28 @@
     {% endif %}
 </div>
 {% if survey.needComponent > 0 %}
-    {% if survey.technicalComponents|length > 1 %}
-        <h2>Liste des composants techniques</h2>
-    {% endif %}
-    {% for technicalComponent in survey.technicalComponents %}
-        <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
-        {% if technicalComponent.description %}
-            {{ technicalComponent.description }}
+    <div class="components">
+        {% if survey.technicalComponents|length > 1 %}
+            <h2>Liste des composants techniques</h2>
         {% endif %}
-        {% if technicalComponent.choice > 0 %}
-            {{ technicalComponent.code|raw }}
-        {% else %}
-            <p>
-                {% if app.request.attributes.get('_route') == "answer_survey" %}
-                    <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'repondre', 'action': 'sondage', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
-                {% else %}
-                    <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'sondage', 'action': 'consultation', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
-                {% endif %}
-            </p>
-        {% endif %}
-    {% endfor %}
+        {% for technicalComponent in survey.technicalComponents %}
+            <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+            {% if technicalComponent.description %}
+                {{ technicalComponent.description }}
+            {% endif %}
+            {% if technicalComponent.choice > 0 %}
+                {{ technicalComponent.code|raw }}
+            {% else %}
+                <p>
+                    {% if app.request.attributes.get('_route') == "answer_survey" %}
+                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'repondre', 'action': 'sondage', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
+                    {% else %}
+                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'sondage', 'action': 'consultation', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
+                    {% endif %}
+                </p>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endif %}
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     <fieldset>
@@ -49,8 +51,8 @@
         <fieldset>
             <legend>
                 <h2>Aides techniques utilisées</h2>
-                <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
             </legend>
+            <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
             {% if categories %}
                 {% for category in categories %}
                     <fieldset>
@@ -59,7 +61,8 @@
                         </legend>    
                         {% for assistive in category.assistives %}
                             {% set key = assistive.id %}
-                            {{ form_row(form.assistives[key]) }}
+                            {{ form_label(form.assistives[key]) }}
+                            {{ form_widget(form.assistives[key]) }}
                         {% endfor %}            
                     </fieldset>
                 {% endfor %}

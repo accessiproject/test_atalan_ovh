@@ -77,3 +77,19 @@ form>fieldset>ol>li {
     border-radius: 5px;
     border: 1px solid #c6d9df;
 }
+
+.public .components {
+    background: #e9f9e9;
+    border: 1px solid #abd3ab;
+    padding: 0.75rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.public h3 {
+    font-size: 1.5rem;
+}
+
+.public legend p {
+    font-size: 1rem;
+}
