@@ -70,20 +70,22 @@
 {%- endblock textarea_widget -%}
 
 {% block form_row -%}
+<div class="form-row">
     {%- if expanded is defined and expanded -%}
         {{ block('fieldset_form_row') }}
     {%- else -%}
-    {%- set widget_attr = {} -%}
+    {%- set widget_attr = {attr: {'class': "form-control"}} -%}
     {%- if help is not empty -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help", 'class': "form-control"}} -%}
     {%- endif -%}
-        <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group row' ~ ((not compound or force_error|default(false)) and not valid ? ' is-invalid'))|trim})} %}{{ block('attributes') }}{% endwith %}>
+        <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group col-12' ~ ((not compound or force_error|default(false)) and not valid ? ' is-invalid'))|trim})} %}{{ block('attributes') }}{% endwith %}>
             {{- form_label(form) -}}
-            <div class="{{ block('form_group_class') }}">
+            <div class="champ">
                 {{- form_errors(form) -}}
                 {{- form_widget(form, widget_attr) -}}
                 {{- form_help(form) -}}
             </div>
     {##}</div>
     {%- endif -%}
+</div>
 {%- endblock form_row %}

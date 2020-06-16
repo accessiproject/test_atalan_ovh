@@ -6,13 +6,14 @@
 {% endblock %}
 
 {% block body %}
-    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'form'}}) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'form', }}) }}
         <h1>{{ id ? 'Modification du sondage' : 'Création d\'un nouveau sondage' }}</h1>
         <fieldset>
             <legend>
                 <h2>Informations générales</h2>
             </legend>
-            {{ form_row(form.title) }}        <p>
+            {{ form_row(form.title) }}
+            <fieldset>
             {{ form_label(form.status) }}
             <ul>
                 {% for statu in form.status %}
@@ -22,11 +23,14 @@
                     </li>
                 {% endfor %}
             </ul>
+            </fieldset>
             {{ form_row(form.closing_message) }}
             {{ form_row(form.question) }}
             {{ form_row(form.information) }}
-            {{ form_row(form.show_assistive) }}
-            {{ form_row(form.need_component) }}
+            {{ form_label(form.show_assistive) }}
+            {{ form_widget(form.show_assistive) }}
+            {{ form_label(form.need_component) }}
+            {{ form_widget(form.need_component) }}
         </fieldset>
         <fieldset>
             <legend>
@@ -38,7 +42,8 @@
                     <li>
                         {{ form_row(technicalComponent.title) }}
                         {{ form_row(technicalComponent.description) }}
-                        {{ form_row(technicalComponent.choice) }}
+                        {{ form_label(technicalComponent.choice) }}
+                        {{ form_widget(technicalComponent.choice) }}
                         {{ form_row(technicalComponent.code) }}
                         {{ form_row(technicalComponent.url) }}
                     </li>
@@ -50,7 +55,8 @@
             <legend>
                 <h2>Réponses</h2>
             </legend>
-            {{ form_row(form.multiple) }}
+            {{ form_label(form.multiple) }}
+            {{ form_widget(form.multiple) }}
             <ol id="idOlProposition" class="propositions" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">
                 {# iterate over each existing proposition and render its only field: wording #}
                 {% for proposition in form.propositions %}

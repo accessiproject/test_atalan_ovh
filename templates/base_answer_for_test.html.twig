@@ -8,6 +8,7 @@
         </title>
         {% block stylesheets %}            
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <link rel="stylesheet" href="{{ asset('_css/style.css') }}">
         {% endblock %}
         {% block head_javascripts %}
             <!-- Latest compiled and minified JavaScript -->
@@ -19,7 +20,19 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="container-fluid">
+
+            <header role="banner">
+                <div class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="https://www.atalan.fr"><img src="{{ asset('images/atalan.png') }}" alt="Atalan - Accessibilité numérique, sensibilisation au handicap" /></a>
+                </div>
+            </header>
+
+            <main role="main">
+                {% block body %}{% endblock %}
+                {% block javascripts %}{% endblock %}
+            </main>
+
+        </div>
     </body>
 </html>

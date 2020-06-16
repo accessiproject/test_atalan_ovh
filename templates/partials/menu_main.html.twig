@@ -1,18 +1,26 @@
 {% if app.user %}
     <div id="iddiv"></div>
 {% endif %}
-<script src="{{ asset('_js/designMenuClass.js') }}"></script>
-<script>
 
-function menu_main() {
-    let tab = [
-        ["Sondages","{{ path('survey_list') }}","sondage"],
-        ["Administrateurs","{{ path('user_list') }}","utilisateur"],
-        ["Technologies d'assistance","{{ path('assistive_list') }}","assistance"]
-    ];
-
-    let menu = new DesignMenuClass("iddiv","Menu principal",tab);
-}
-menu_main();
-
-</script>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="https://www.atalan.fr"><img src="{{ asset('images/atalan.png') }}" alt="Atalan - Accessibilité numérique, sensibilisation au handicap" /></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Menu principal">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link active" href="{{ path('survey_list') }}" aria-current="page">Sondages</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('user_list') }}">Administrateurs</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('assistive_list') }}">Technologies d'assistance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+      </li>
+    </ul>
+  </div>
+</nav>

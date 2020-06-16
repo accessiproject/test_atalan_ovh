@@ -1,0 +1,39 @@
+.navbar-light .navbar-nav .nav-link.active {
+    border-bottom: 2px solid black;
+    color: rgba(0, 0, 0, 1);
+    font-weight: bold;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0, 0, 0, 0.75);
+}
+
+.navbar-light .navbar-nav .nav-item {
+    margin: 0 10px;
+}
+
+.navbar-brand {
+    margin: 5px 30px 5px 0;
+}
+
+main {
+    padding: 20px 0;
+}
+
+.container-fluid {
+    max-width: 80rem;
+}
+
+form>fieldset {
+    margin-bottom: 2rem;
+    padding: 0.5rem 0.5rem 2rem;
+    border-bottom: 1px solid #CCC;
+}
+
+form>fieldset:last-of-type {
+    border: none;
+}
+
+form>fieldset>ol>li {
+    margin-bottom: 2rem;
+}

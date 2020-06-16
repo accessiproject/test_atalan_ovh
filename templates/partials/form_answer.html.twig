@@ -1,32 +1,32 @@
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-    <h1 tabindex="0"s>{{ survey.title }}</h1>
-    <h2 tabindex="0">Question</h2>
-    <p tabindex="0">{{ survey.question }}</p>
-    {% if survey.information is defined %}
-        <p tabindex="0">{{ survey.information }}</p>
+<h1 tabindex="0">{{ survey.title }}</h1>
+<h2 tabindex="0">Question</h2>
+<p tabindex="0">{{ survey.question }}</p>
+{% if survey.information is defined %}
+    <p tabindex="0">{{ survey.information }}</p>
+{% endif %}
+{% if survey.needComponent > 0 %}
+    {% if survey.technicalComponents|length > 1 %}
+        <h2>Liste des composants techniques</h2>
     {% endif %}
-    {% if survey.needComponent > 0 %}
-        {% if survey.technicalComponents|length > 1 %}
-            <h2>Liste des composants techniques</h2>
+    {% for technicalComponent in survey.technicalComponents %}
+        <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+        {% if technicalComponent.description %}
+            {{ technicalComponent.description }}
         {% endif %}
-        {% for technicalComponent in survey.technicalComponents %}
-            <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
-            {% if technicalComponent.description %}
-                {{ technicalComponent.description }}
-            {% endif %}
-            {% if technicalComponent.choice > 0 %}
-                {{ technicalComponent.code|raw }}
-            {% else %}
-                <p>
-                    {% if app.request.attributes.get('_route') == "answer_survey" %}
-                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'repondre', 'action': 'sondage', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
-                    {% else %}
-                        <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'sondage', 'action': 'consultation', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
-                    {% endif %}
-                </p>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+        {% if technicalComponent.choice > 0 %}
+            {{ technicalComponent.code|raw }}
+        {% else %}
+            <p>
+                {% if app.request.attributes.get('_route') == "answer_survey" %}
+                    <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'repondre', 'action': 'sondage', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
+                {% else %}
+                    <a target="_blank" href="{{ path('answer_technicalcomponent', {'entity': 'sondage', 'action': 'consultation', 'id': technicalComponent.id }) }}">Voir le composant technique</a>
+                {% endif %}
+            </p>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     <fieldset>
         <legend>
             <h2>Réponses proposées</h2>
@@ -74,9 +74,10 @@
             {{ form_row(form.email) }}
         </fieldset>
         <fieldset>
-            {{ form_row(form.accept) }}
-            <button type="submit">
-                Envoyer mes réponses
-            </button>
+            {{ form_label(form.accept) }}
+            {{ form_widget(form.accept) }}
         </fieldset>
+        <button class="btn btn-primary" type="submit">
+            Envoyer mes réponses
+        </button>
 {{ form_end(form) }}
