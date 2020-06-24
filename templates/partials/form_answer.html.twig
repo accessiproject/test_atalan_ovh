@@ -1,9 +1,9 @@
-<h1 tabindex="0">{{ survey.title }}</h1>
+<h1>{{ survey.title }}</h1>
 <div class="question">
-    <h2 tabindex="0">Question</h2>
-    <p tabindex="0">{{ survey.question }}</p>
-    {% if survey.information is defined %}
-        <p tabindex="0">{{ survey.information }}</p>
+    <h2>Question</h2>
+    <p>{{ survey.question }}</p>
+    {% if survey.information %}
+        <p>{{ survey.information }}</p>
     {% endif %}
 </div>
 {% if survey.needComponent > 0 %}
@@ -12,7 +12,7 @@
             <h2>Liste des composants techniques</h2>
         {% endif %}
         {% for technicalComponent in survey.technicalComponents %}
-            <h3>Composant technique n°{{ loop.index }}. {{ technicalComponent.title }}</h3>
+            <h3>{{ technicalComponent.title }}</h3>
             {% if technicalComponent.description %}
                 {{ technicalComponent.description }}
             {% endif %}
@@ -34,9 +34,10 @@
     <fieldset>
         <legend>
             <h2>Réponses proposées</h2>
-            <p>{{ survey.multiple ? '(plusieurs réponses possibles).' : '(une seule réponse possible).' }}</p>
+            <p>{{ survey.multiple ? 'Choisissez au moins une proposition de réponse (plusieurs réponses possibles).' : 'Choisissez une proposition de réponse (une seule réponse possible).' }}</p>
         </legend>
-        {% if form.propositions is defined %}
+        {{ form_errors(form.propositions) }}
+        {% if form.propositions %}
             <ol id="idOlAnswer">
                 {% for proposition in form.propositions %}
                     {{ form_widget(proposition) }}
@@ -51,8 +52,9 @@
         <fieldset>
             <legend>
                 <h2>Aides techniques utilisées</h2>
+                <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
             </legend>
-            <p>Sélectionner les aides techniques que vous avez utilisées pendant ce test.</p>
+            {{ form_errors(form.assistives) }}
             {% if categories %}
                 {% for category in categories %}
                     <fieldset>

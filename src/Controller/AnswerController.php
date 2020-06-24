@@ -47,7 +47,7 @@ class AnswerController extends AbstractController
         $manager->remove($answer);
         $manager->flush();    
         return $this->redirectToRoute('answer_list', [
-            'id' => $answer->getId(),
+            'id' => $answer->getSurvey()->getId(),
         ]);
     }
     
@@ -84,7 +84,7 @@ class AnswerController extends AbstractController
                 $answer->setPropositions($proposition);
             }
 
-            if ($survey->GetShowAssistive() > 1) {
+            if ($survey->GetShowAssistive() > 0) {
                 foreach ($form["assistives"]->getData() as $assistive)
                     $answer->addAssistive($assistive);
             }

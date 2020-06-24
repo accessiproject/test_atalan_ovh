@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class AnswerType extends AbstractType
 {
@@ -50,13 +51,21 @@ class AnswerType extends AbstractType
             ->add('comment', TextareaType::class, [
                 'label' => 'Votre commentaire (facultatif) :',
                 'required' => false,
+                'attr' => [
+                    'placeholder' => 'Entrez un commentaire (facultatif)',
+                    'rows' => 10,
+                    'cols' => 20,
+                ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Votre adresse email (facultatif) :',
                 'required' => false,
+                'attr' => [
+                    'placeholder' => 'Entrez votre adresse email (facultatif)',
+                ],
             ])
             ->add('accept', CheckboxType::class, [
-                'label' => 'J\'accepte de partager mes données techniques avec la Société Atalan.',
+                'label' => 'Je confirme ma participation à ce sondage.',
                 'required' => false,
             ]);
 
@@ -66,6 +75,11 @@ class AnswerType extends AbstractType
                     ->add('propositions', ChoiceType::class, array(
                         'choices' => $choices,
                         'expanded' => true,
+                        'constraints' => [
+                            new Assert\NotBlank([
+                                'message' => 'Attention! Vous devez choisir une proposition de réponse.',
+                            ])
+                        ],
                         'multiple' => false,
                     ));
             } else {
@@ -73,6 +87,12 @@ class AnswerType extends AbstractType
                     ->add('propositions', EntityType::class, [
                         'class' => Proposition::class,
                         'expanded' => true,
+                        'constraints' => [
+                            new Assert\Count([
+                                'min' => 1,
+                                'minMessage' => 'Attention! Vous devez choisir au moins une proposition de réponse.',
+                            ])
+                        ],
                         'multiple' => true,
                         'query_builder' => function (EntityRepository $proposition) use ($survey) {
                             return $proposition->createQueryBuilder('u')
@@ -91,6 +111,12 @@ class AnswerType extends AbstractType
                         'multiple' => true,
                         'expanded' => true,
                         'class' => Assistive::class,
+                        'constraints' => [
+                            new Assert\Count([
+                                'min' => 1,
+                                'minMessage' => 'Attention! Vous devez sélectionner au moins une aide technique.',
+                            ])
+                        ],
                         'choice_label' => 'name',
                         'group_by' => 'category.type',
                     ]);

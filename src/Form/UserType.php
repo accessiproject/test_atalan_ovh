@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+//dependency injection
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +17,8 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
+        //creation of form fields
         $builder
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom :',
@@ -52,6 +55,7 @@ class UserType extends AbstractType
             ]);
     }
 
+    //configuration OptionsResolver
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

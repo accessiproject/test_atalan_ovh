@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+//dependency injection
 use Faker;
 use App\Entity\User;
 use App\Entity\Answer;
@@ -16,176 +17,92 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
-
     private $encoder;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
-    {
+    //constructor with one argument: the service UserPasswordEncoderInterface 
+    public function __construct(UserPasswordEncoderInterface $encoder) {
         $this->encoder = $encoder;
     }
 
-    public function load(ObjectManager $manager)
-    {
+    //method for loading test data
+    public function load(ObjectManager $manager) {
 
-        // initialisation de l'objet Faker
-        // on peut préciser en paramètre la localisation, 
-        // pour avoir des données qui semblent "françaises"
+        //initialization object Faker
+        //configure the location, to have "French" data
         $faker = Faker\Factory::create('fr_FR');
 
-        //initialisation des utilisateurs
+        //creation users
         for ($i = 1; $i <= 5; $i++) {
             $user = new User();
             $user->setFirstname($faker->firstName);
             $user->setLastname($faker->lastName);
-            $user->setEmail("kevin.bustamante$i@mail.novancia.fr");
+            $user->setEmail("test$i@test.fr");
             $user->setRoles(["ROLE_ADMIN"]);
             $password = $this->encoder->encodePassword($user, 'atalan');
             $user->setPassword($password);
             $user->updatedTimestamps();
-            $manager->persist($user);
+            $manager->persist($user); //persistence an user object
+            $manager->flush(); //save the assistives in the database 
         }
 
 
-        //initialisation des categories
-        /*
-        $type=["Synthèse vocale","Logiciel de grossissement","Plage braille"];
-        for ($i = 0; $i < count($type); $i++)
-        {
+        //array of categories
+        $array_categories = ["Lecteur d'écran", "Logiciel de grossissement", "Plage braille"];
+        for ($i = 0; $i < count($array_categories); $i++) { //creation categories
             $category = new Category();
-            $category->setType($type[$i]);
-            
-            //initialisation des aides techniques
-            if ($type[$i]=="Synthèse vocale")
-                $tab=["JAWS","NVDA","ORCA","VoiceOver"];
-            else if ($type[$i]=="Logiciel de grossissement")
-                $tab=["ZoomText","Loupe de Windows"];
-            else
-                $tab=["Plage braille"];
-            
-            for ($j = 0; $j < count($tab); $j++)
-            {    
-                $assistive = new Assistive();
-                $assistive->setName($tab[$j]);
-                $assistive->setCategory($category);
-                $manager->persist($assistive);
-            }
-            $manager->persist($category);
-            $manager->flush();
-        }
-        */
+            $category->setType($array_categories[$i]);
 
-        //initialisation des sondages
+            //initialization an array of assistives technology
+            if ($array_categories[$i] == "Lecteur d'écran")
+                $array_assistives = ["JAWS", "NVDA", "ORCA", "VoiceOver"]; //array screen readers
+            else if ($array_categories[$i] == "Logiciel de grossissement")
+                $array_assistives = ["ZoomText", "Loupe de Windows"]; //array magnification softwares
+            else
+                $array_assistives = ["Plage braille"]; //array braille display
+
+            //creation assistives technology
+            for ($j = 0; $j < count($array_assistives); $j++) {
+                $assistive = new Assistive();
+                $assistive->setName($array_assistives[$j]);
+                $assistive->setCategory($category);
+                $manager->persist($assistive); //persistence an assistive object
+            }
+            $manager->persist($category); //persistence a category object
+            $manager->flush(); //save the categories and assistives in the database 
+        }
+
+        //creation surveys
         for ($i = 1; $i <= 2; $i++) {
             $survey = new Survey();
             $survey->setTitle("Question n°$i");
             $survey->setQuestion($faker->text);
+            $survey->setInformation($faker->text);
             $survey->setMultiple(true);
-            $survey->setStatus("Initialisé");
+            $survey->setShowAssistive(true);
+            $survey->setNeedComponent(true);
+            $survey->setStatus("Brouillon");
             $survey->setClosingMessage($faker->text);
-            $survey->updatedTimestamps();
+            $survey->timeStamps();
             $survey->setClosedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+30 days', $timezone = null));
 
             //creation propositions
-            /*
-            for ($j = 1; $j <= 3; $j++)
-            {
+            for ($j = 1; $j <= 3; $j++) {
                 $proposition = new Proposition();
                 $proposition->setSurvey($survey);
                 $proposition->setWording($faker->sentence($nbWords = 6, $variableNbWords = true));
                 $manager->persist($proposition);
             }
-            */
 
             //creation TechnicalComponents
             for ($j = 1; $j <= 3; $j++) {
                 $technicalcomponent = new TechnicalComponent();
                 $technicalcomponent->setSurvey($survey);
                 $technicalcomponent->setTitle($faker->sentence($nbWords = 6, $variableNbWords = true));
+                $technicalcomponent->setDescription($faker->sentence($nbWords = 6, $variableNbWords = true));
                 $technicalcomponent->setChoice(false);
                 $technicalcomponent->setUrl($faker->url);
-                $manager->persist($technicalcomponent);
+                $manager->persist($technicalcomponent); //persistence technical components
             }
-
-            //creation propositions
-            for ($m = 1; $m <= 3; $m++) {
-                $proposition = new Proposition();
-                $proposition->setSurvey($survey);
-                $proposition->setWording($faker->sentence($nbWords = 6, $variableNbWords = true));
-
-                //initialisation des categories
-                for ($k = 0; $k < 2; $k++) {
-                    $category = new Category();
-                    $category->setType($faker->word);
-
-                    //initialisation des aides techniques
-                    if ($k == 0)
-                        $nb = 3;
-                    else
-                        $nb = 1;
-
-                    for ($l = 0; $l < $nb; $l++) {
-                        $assistive = new Assistive();
-                        $assistive->setName($faker->word);
-                        $assistive->setCategory($category);
-
-                        //creation answers
-                        for ($n = 1; $n <= 3; $n++) {
-                            $answer = new Answer();
-                            $answer->setSurvey($survey);
-                            $answer->setUserAgent($faker->word);
-
-                            $tab_device = array("desktop", "mobile");
-                            $index_device = array_rand($tab_device, 1);
-                            $device = $tab_device[$index_device];
-
-                            if ($device == "desktop") {
-                                //définir aléatoirement la configuration installée sur l'appareil
-                                $tab_os = array("windows", "linux", "mac");
-                                $index_os = array_rand($tab_os, 1);
-                                $os = $tab_os[$index_os];
-                                //définir aléatoirement le navigateur utilisé
-                                $tab_browser = array("firefox", "chrome");
-                                $index_browser = array_rand($tab_browser, 1);
-                                $browser = $tab_browser[$index_browser];
-                            } else {
-                                //définir aléatoirement la configuration installée sur l'appareil
-                                $tab_os = array("ios", "android");
-                                $index_os = array_rand($tab_os, 1);
-                                $os = $tab_os[$index_os];
-                                //définir aléatoirement le navigateur utilisé
-                                if ($os == "ios") {
-                                    $browser = "safari";
-                                } else {
-                                    $tab_browser = array("firefox", "chrome");
-                                    $index_browser = array_rand($tab_browser, 1);
-                                    $browser = $tab_browser[$index_browser];
-                                }
-                            }
-
-                            $answer->setDeviceType($device);
-                            $answer->setDeviceIdentifier("");
-                            $answer->setDeviceManufacturer("");
-                            $answer->setDeviceModel("");
-                            $answer->setOsName($os);
-                            $answer->setOsVersion("");
-                            $answer->setBrowserName($browser);
-                            $answer->setBrowserVersion("");
-                            $answer->setComment($faker->text);
-                            $answer->setEmail("answer$j@atalan.fr");
-                            $answer->setAccept(true);
-                            $answer->setAcceptedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null));
-                            $answer->setCreatedat($faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null));
-                            $answer->addProposition($proposition);
-                            $answer->addAssistive($assistive);
-                            $manager->persist($answer);
-                        }
-                        $manager->persist($assistive);
-                    }
-                    $manager->persist($category);
-                }
-                $manager->persist($proposition);
-            }
-
             $manager->persist($survey);
             $manager->flush();
         }

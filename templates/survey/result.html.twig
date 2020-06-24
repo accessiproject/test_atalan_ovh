@@ -6,58 +6,103 @@
 
 {% block body %}
     <h1>Résultats du sondage – {{ survey.title }}</h1>
-    <p>Rappel : {{ survey.question }}</p>
-    <h2>Tableau 1. Synthèse des résultats</h2>
-    <table class="table table-striped table-bordered table-hover">
-        <thead>
-            <th scope="col">Proposition</th>
-            <th scope="col">Résultat</th>
-            <th scope="col">Pourcentage</th>
-        </thead>
-        {% for proposition in survey.propositions %}
-            <tr>
-                <th scope="row">{{ proposition.wording }}</th>
-                <td>{{ proposition.answers|length }}</td>
-                {% set pourcentage = proposition.answers|length * 100 / number_answers %}
-                <td>{{ pourcentage|round }}%</td>
-            </tr>
-        {% endfor %}
-        </table>
-        <hr>
-        <h2>Tableau 2. Résultats détaillés</h2>
-        <button onclick="init()">Réinitialiser les filtres</button>
-        <table>
-            <thead>
-                <tr id="iddivselects">             
-                    <th>
-                        <select onchange="creationParameter()" aria-label="Filtrer par answer" id="answer_id"></select>
-                    </th>
-                    <th>Comment</th>
-                    <th>Email</th>
-                    <th>
-                        <select onchange="creationParameter()" aria-label="Filtrer par proposition" id="proposition_id"></select>
-                    </th>
-                    <th>
-                        <select onchange="creationParameter()" aria-label="Filtrer par device" id="answer_device_type"></select>
-                    </th>
-                    <th>
-                        <select onchange="creationParameter()" aria-label="Filtrer par os" id="answer_os_name"></select>
-                    </th>
-                    <th>
-                        <select onchange="creationParameter()" aria-label="Filtrer par browser" id="answer_browser_name"></select>
-                    </th>
-                    <th>
-                        <select onchange="creationParameter()" aria-label="Filtrer par assistive" id="assistive_id"></select>
-                    </th>
-                    <th>User_agent</th>
-                </tr>
-            </thead>
-            <tbody id="idBodyResult"></tbody>
-        </table>
+    {% if survey.status=="Ouvert" %}
+        <input type="text" id="idurl" value="{{ url('answer_survey', {'id': survey.id}) }}">
+    {% else %}
+        <input type="text" id="idurl" value="{{ url('answer_survey', {'id': survey.id}) }}" disabled>
+    {% endif %}
+    {% if survey.answers is not empty %}
+        <p>Rappel : {{ survey.question }}</p>
+        <p>Nombre de personnes répondantes : {{ survey.answers|length }}</p>
+        {% if survey.technicalcomponents is defined and survey.needcomponent > 0 and survey.showassistive > 0 %}
+            <h2>Synthèse des résultats</h2>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <th scope="col">Proposition</th>
+                    <th scope="col">Résultat</th>
+                    <th scope="col">Pourcentage</th>
+                </thead>
+                {% for proposition in survey.propositions %}
+                    <tr>
+                        <th scope="row">{{ proposition.wording }}</th>
+                        <td>{{ proposition.answers|length }}</td>
+                        {% set pourcentage = proposition.answers|length * 100 / number_answers %}
+                        <td>{{ pourcentage|round }}%</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <hr>
+            <h2>Résultats détaillés</h2>
+            <button onclick="init()">Réinitialiser les filtres</button>
+            <table>
+                <thead>
+                    <tr id="iddivselects">             
+                        <th>
+                            <select onchange="creationParameter()" aria-label="Filtrer par answer" id="answer_id"></select>
+                        </th>
+                        <th>Comment</th>
+                        <th>Email</th>
+                        <th>
+                            <select onchange="creationParameter()" aria-label="Filtrer par proposition" id="proposition_id"></select>
+                        </th>
+                        <th>
+                            <select onchange="creationParameter()" aria-label="Filtrer par device" id="answer_device_type"></select>
+                        </th>
+                        <th>
+                            <select onchange="creationParameter()" aria-label="Filtrer par os" id="answer_os_name"></select>
+                        </th>
+                        <th>
+                            <select onchange="creationParameter()" aria-label="Filtrer par browser" id="answer_browser_name"></select>
+                        </th>
+                        <th>
+                            <select onchange="creationParameter()" aria-label="Filtrer par assistive" id="assistive_id"></select>
+                        </th>
+                        <th>User_agent</th>
+                    </tr>
+                </thead>
+                <tbody id="idBodyResult"></tbody>
+            </table>
+        {% else %}
+            <h2>Synthèse des résultats</h2>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <th scope="col">Proposition</th>
+                    <th scope="col">Résultat</th>
+                    <th scope="col">Pourcentage</th>
+                    <th scope="col">Commentaire</h>
+                </thead>
+                {% for proposition in survey.propositions %}
+                    <tr>
+                        <th scope="row">{{ proposition.wording }}</th>
+                        <td>{{ proposition.answers|length }}</td>
+                        {% set pourcentage = proposition.answers|length * 100 / number_answers %}
+                        <td>{{ pourcentage|round }}%</td>
+                        <td>
+                            <ol>
+                                {% for answer in proposition.answers %}
+                                    {% if answer.comment is not empty %}
+                                        <li>
+                                            {{ answer.comment }}
+                                            {% if answer.email is not empty %}
+                                                <a href="mailto:{{ answer.email }}">{{ answer.email }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    {% else %}
+        <p>Aucune réponse n'a été encore enregistrée.</p>
+    {% endif %}
         <script src="{{ asset('_js/TableClass.js') }}"></script>
         <script>
 
-var url_ajax = "http://sondage.atalan.fr/survey_atalan/public/index.php/";
+var url_ajax = "http://127.0.0.1:8000/";
+//"http://sondage.atalan.fr/survey_atalan/public/index.php/";
 //"http://127.0.0.1:8000/";
 
 //var urlcourante = document.location.href;
