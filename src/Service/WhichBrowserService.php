@@ -20,5 +20,6 @@ class WhichBrowserService
         $object->setOsName($result->os->name);
         $object->setOsVersion($result->os->version->toString());
         $object->setBrowserName($result->browser->name);
+        $object->setBrowserVersion($result->browser->version->toString());
     }
 }
